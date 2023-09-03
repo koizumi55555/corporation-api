@@ -1,7 +1,7 @@
 package master_repo
 
 import (
-	"koizumi55555/corporation-api/build/db"
+	db "koizumi55555/corporation-api/build/db/sql"
 	"koizumi55555/corporation-api/pkg/logger"
 )
 

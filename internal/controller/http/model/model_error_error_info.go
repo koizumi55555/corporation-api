@@ -9,10 +9,9 @@
 
 package model
 
-type ModelError struct {
+// ErrorErrorInfo - 詳細
+type ErrorErrorInfo struct {
 
-	// エラーコード
-	Code string `json:"code,omitempty"`
-
-	ErrorInfo ErrorErrorInfo `json:"errorInfo,omitempty"`
+	// エラーメッセージ
+	Message string `json:"message,omitempty"`
 }

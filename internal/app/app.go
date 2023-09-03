@@ -2,7 +2,7 @@ package app
 
 import (
 	"fmt"
-	"koizumi55555/corporation-api/build/db"
+	db "koizumi55555/corporation-api/build/db/sql"
 	"koizumi55555/corporation-api/config"
 	v1 "koizumi55555/corporation-api/internal/controller/http/v1"
 	"koizumi55555/corporation-api/internal/usecase"
