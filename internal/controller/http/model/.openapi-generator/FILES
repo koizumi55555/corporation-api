@@ -1,0 +1,5 @@
+api/openapi.yaml
+model_corporation.go
+model_corporation_create.go
+model_corporation_patch.go
+model_error.go
