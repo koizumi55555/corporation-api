@@ -1,7 +1,8 @@
 package master_repo
 
 import (
-	db "koizumi55555/corporation-api/build/db/sql"
+	db "koizumi55555/corporation-api/build/db/postgres"
+	"koizumi55555/corporation-api/internal/usecase/master_repo/schema"
 	"testing"
 
 	"gorm.io/gorm"
@@ -22,9 +23,25 @@ func makeMasterRepo(t *testing.T) *MasterRepository {
 func TruncateDB(t *testing.T, db *db.DBHandler) {
 	t.Helper()
 
-	tables := []interface{}{}
+	tables := []interface{}{
+		schema.Corporation{},
+	}
 	for _, table := range tables {
 		if err := db.Conn.Session(&gorm.Session{AllowGlobalUpdate: true}).Delete(&table).Error; err != nil {
+			t.Fatal(err)
+		}
+	}
+}
+
+func SeedData(t *testing.T, db *db.DBHandler) {
+	t.Helper()
+
+	seedFuncs := []func(db *gorm.DB) error{
+		SeedCorporation,
+	}
+
+	for _, seedFunc := range seedFuncs {
+		if err := seedFunc(db.Conn); err != nil {
 			t.Fatal(err)
 		}
 	}

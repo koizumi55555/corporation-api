@@ -408,3 +408,55 @@ func Test_ValidatePatchCorporationRequest(t *testing.T) {
 		})
 	}
 }
+func Test_ValidateCorporationIdRequest(t *testing.T) {
+	type mockParam struct {
+		Params []gin.Param
+	}
+
+	testCorpID := "2907a563-978c-4383-a65d-64819821f1f1"
+
+	tests := []struct {
+		name                  string
+		mockParam             mockParam
+		requestBody           io.Reader
+		want_corporationID    string
+		want_CorporationPatch CorporationPatch
+		wantApiErrResponse    apierr.ApiErrF
+	}{
+		{
+			name: "[正常系] 適切なリクエスト情報の場合、企業IDを返却する path[corporationID=2907a563-978c-4383-a65d-64819821f1f1]",
+			mockParam: mockParam{
+				Params: []gin.Param{
+					{
+						Key:   "corporation_id",
+						Value: testCorpID,
+					},
+				},
+			},
+			want_corporationID: testCorpID,
+			wantApiErrResponse: nil,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			mockRequest, _ := http.NewRequest("GET",
+				"/corporation/"+testCorpID, tt.requestBody)
+			mockContext := &gin.Context{Request: mockRequest, Params: tt.mockParam.Params}
+			got_corporationID, gotApiErr :=
+				ValidateCorporationIdRequest(mockContext)
+			if got_corporationID != tt.want_corporationID {
+				t.Errorf("ValidatePostWorkspaceRequest() got_corporationID = %v, want %v",
+					got_corporationID, tt.want_corporationID)
+			}
+
+			// nil以外の判定
+			if tt.wantApiErrResponse != nil {
+				if gotApiErr != tt.wantApiErrResponse &&
+					reflect.TypeOf(gotApiErr) != reflect.TypeOf(tt.wantApiErrResponse) {
+					t.Errorf("ValidatePatchCorporationRequest  gotError = %v, wantError %v", gotApiErr, tt.wantApiErrResponse)
+				}
+			}
+
+		})
+	}
+}

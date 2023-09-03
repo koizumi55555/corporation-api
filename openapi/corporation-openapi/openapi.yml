@@ -168,6 +168,8 @@ components:
       description: 企業情報登録
       required:
         - name
+        - domain
+        - number
         - corp_type
       properties:
         corporation_id:

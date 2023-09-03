@@ -19,11 +19,11 @@ type corporationRoutes struct {
 func NewCorporationRoutes(handler *gin.RouterGroup,
 	corporationUC usecase.CorporationUseCase, l *logger.Logger) {
 	r := &corporationRoutes{l, corporationUC}
-	handler.GET("/corporation/:CorporationID", r.GetCorporation)
+	handler.GET("/corporation/:corporation_id", r.GetCorporation)
 	handler.GET("/corporation", r.GetCorporationList)
 	handler.POST("/corporation", r.CreateCorporation)
-	handler.PATCH("/corporation/:CorporationID", r.UpdateCorporation)
-	handler.DELETE("/corporation/:CorporationID", r.DeleteCorporation)
+	handler.PATCH("/corporation/:corporation_id", r.UpdateCorporation)
+	handler.DELETE("/corporation/:corporation_id", r.DeleteCorporation)
 }
 
 // Get Corporation
