@@ -2,8 +2,8 @@ package v1
 
 import (
 	"io"
-	"koizumi55555/go-restapi/internal/entity"
-	"koizumi55555/go-restapi/internal/usecase/mock"
+	"koizumi55555/corporation-api/internal/entity"
+	"koizumi55555/corporation-api/internal/usecase/mock"
 	"net/http"
 	"net/http/httptest"
 	"testing"

@@ -2,8 +2,8 @@ package usecase
 
 import (
 	"context"
-	"koizumi55555/go-restapi/internal/controller/http/httperr/apierr"
-	"koizumi55555/go-restapi/internal/entity"
+	"koizumi55555/corporation-api/internal/controller/http/httperr/apierr"
+	"koizumi55555/corporation-api/internal/entity"
 )
 
 type (

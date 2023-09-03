@@ -2,7 +2,7 @@ package mock
 
 import (
 	"fmt"
-	"koizumi55555/go-restapi/pkg/logger"
+	"koizumi55555/corporation-api/pkg/logger"
 	"testing"
 
 	gomock "github.com/golang/mock/gomock"

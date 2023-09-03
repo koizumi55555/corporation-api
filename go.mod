@@ -1,4 +1,4 @@
-module koizumi55555/go-restapi
+module koizumi55555/corporation-api
 
 go 1.20
 

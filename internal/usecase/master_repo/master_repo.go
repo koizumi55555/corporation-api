@@ -1,8 +1,8 @@
 package master_repo
 
 import (
-	"koizumi55555/go-restapi/build/db"
-	"koizumi55555/go-restapi/pkg/logger"
+	"koizumi55555/corporation-api/build/db"
+	"koizumi55555/corporation-api/pkg/logger"
 )
 
 type MasterRepository struct {
