@@ -4,7 +4,7 @@ package v1
 // 	"encoding/json"
 // 	"fmt"
 // 	"io"
-// 	"koizumi55555/go-restapi/internal/entity"
+// 	"koizumi55555/corporation-api/internal/entity"
 // 	"net/http"
 // 	"net/http/httptest"
 // 	"testing"

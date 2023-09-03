@@ -2,12 +2,12 @@ package app
 
 import (
 	"fmt"
-	"koizumi55555/go-restapi/build/db"
-	"koizumi55555/go-restapi/config"
-	v1 "koizumi55555/go-restapi/internal/controller/http/v1"
-	"koizumi55555/go-restapi/internal/usecase"
-	master_repo "koizumi55555/go-restapi/internal/usecase/master_repo"
-	"koizumi55555/go-restapi/pkg/logger"
+	"koizumi55555/corporation-api/build/db"
+	"koizumi55555/corporation-api/config"
+	v1 "koizumi55555/corporation-api/internal/controller/http/v1"
+	"koizumi55555/corporation-api/internal/usecase"
+	master_repo "koizumi55555/corporation-api/internal/usecase/master_repo"
+	"koizumi55555/corporation-api/pkg/logger"
 
 	"github.com/gin-gonic/gin"
 )

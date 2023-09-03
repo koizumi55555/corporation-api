@@ -1,11 +1,11 @@
 package v1
 
 import (
-	"koizumi55555/go-restapi/internal/controller/http/httperr"
-	"koizumi55555/go-restapi/internal/controller/http/model"
-	"koizumi55555/go-restapi/internal/entity"
-	"koizumi55555/go-restapi/internal/usecase"
-	"koizumi55555/go-restapi/pkg/logger"
+	"koizumi55555/corporation-api/internal/controller/http/httperr"
+	"koizumi55555/corporation-api/internal/controller/http/model"
+	"koizumi55555/corporation-api/internal/entity"
+	"koizumi55555/corporation-api/internal/usecase"
+	"koizumi55555/corporation-api/pkg/logger"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

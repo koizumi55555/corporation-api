@@ -1,7 +1,7 @@
 package model
 
 import (
-	"koizumi55555/go-restapi/internal/controller/http/httperr/apierr"
+	"koizumi55555/corporation-api/internal/controller/http/httperr/apierr"
 	"net/http"
 	"testing"
 

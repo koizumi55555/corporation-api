@@ -1,7 +1,7 @@
 package httperr
 
 import (
-	"koizumi55555/go-restapi/internal/controller/http/httperr/apierr"
+	"koizumi55555/corporation-api/internal/controller/http/httperr/apierr"
 
 	"github.com/gin-gonic/gin"
 )

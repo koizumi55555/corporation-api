@@ -1,7 +1,7 @@
 package master_repo
 
 import (
-	"koizumi55555/go-restapi/build/db"
+	"koizumi55555/corporation-api/build/db"
 	"testing"
 
 	"gorm.io/gorm"
@@ -14,11 +14,11 @@ func makeMasterRepo(t *testing.T) *MasterRepository {
 	// if err != nil {
 	// 	t.Fatal(err)
 	// }
-	dbh, err := db.NewDBHandler("localhost", "5432", "organization-integration-user",
-		"organization-integration", "organization-integration-pw", "disable", "", 1)
+	dbh, err := db.NewDBHandler("localhost", "5432", "corporation-api-user",
+		"corporation-api", "corporation-api-pw", "disable", "", 1)
 	if err != nil {
-		dbh, err = rdb.NewDBHandler("postgres", "5432", "organization-integration-user",
-			"organization-integration", "organization-integration-pw", "disable", "", 1)
+		dbh, err = db.NewDBHandler("postgres", "5432", "corporation-api-user",
+			"corporation-api", "corporation-api-pw", "disable", "", 1)
 		if err != nil {
 			t.Fatal(err)
 		}

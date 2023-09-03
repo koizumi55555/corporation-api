@@ -1,8 +1,8 @@
 package main
 
 import (
-	"koizumi55555/go-restapi/config"
-	"koizumi55555/go-restapi/internal/app"
+	"koizumi55555/corporation-api/config"
+	"koizumi55555/corporation-api/internal/app"
 	"log"
 )
 

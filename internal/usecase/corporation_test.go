@@ -2,10 +2,10 @@ package usecase_test
 
 import (
 	"context"
-	"koizumi55555/go-restapi/internal/controller/http/httperr/apierr"
-	"koizumi55555/go-restapi/internal/entity"
-	"koizumi55555/go-restapi/internal/usecase"
-	"koizumi55555/go-restapi/internal/usecase/mock"
+	"koizumi55555/corporation-api/internal/controller/http/httperr/apierr"
+	"koizumi55555/corporation-api/internal/entity"
+	"koizumi55555/corporation-api/internal/usecase"
+	"koizumi55555/corporation-api/internal/usecase/mock"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"

@@ -1,9 +1,9 @@
 package master_repo
 
 import (
-	"koizumi55555/go-restapi/internal/controller/http/httperr/apierr"
-	"koizumi55555/go-restapi/internal/entity"
-	"koizumi55555/go-restapi/internal/usecase/master_repo/schema"
+	"koizumi55555/corporation-api/internal/controller/http/httperr/apierr"
+	"koizumi55555/corporation-api/internal/entity"
+	"koizumi55555/corporation-api/internal/usecase/master_repo/schema"
 
 	"github.com/google/uuid"
 )
