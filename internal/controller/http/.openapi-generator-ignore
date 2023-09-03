@@ -1,0 +1,12 @@
+# OpenAPI Generator Ignore
+model/routers.go
+model/.openapi-generator-ignore
+model/api*
+model/Dockerfile
+model/main.go
+model/README.md
+model/logger.go
+model/impl.go
+model/go.mod
+model/go.sum
+model/helpers.go

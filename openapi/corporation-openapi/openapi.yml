@@ -1,0 +1,301 @@
+openapi: 3.0.2
+info:
+  title: Corporation API
+  version: 0.1.0
+  description: |-
+     Corporation API定義
+servers:
+  - url: http://localhost:8080/api
+tags:
+  - name: List Corporation
+    description: 企業情報一覧取得API
+  - name: Get Corporation
+    description: 企業情報取得API
+  - name: Create Corporation
+    description: 企業作成API
+  - name: Update Corporation
+    description: 企業情報一部項目更新API
+  - name: Delete Corporation
+    description: 企業削除API
+paths:
+  "/v1/corporation":
+    get:
+      tags:
+        - List Corporation
+      summary: 企業情報の一覧を取得する
+      responses:
+        200:
+          description: 取得成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/corporations'
+        400:
+          $ref: '#/components/responses/badRequest'
+        500:
+          $ref: '#/components/responses/internalServerError'
+    post:
+      tags:
+        - Create Corporation
+      summary: 企業作成する
+      requestBody:
+        description: 企業情報登録
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/corporationCreate'
+      responses:
+        201:
+          description: 作成成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/corporations'
+        400:
+          $ref: '#/components/responses/badRequest'
+        500:
+          $ref: '#/components/responses/internalServerError'
+  "/v1/corporation/{corporation_id}":
+    get:
+      tags:
+        - Get Corporation
+      summary: 指定した条件に合致する企業を取得する
+      parameters:
+        - name: corporation_id
+          in: path
+          required: true
+          schema:
+            type: string
+            description: 企業ID
+            example: 8065a472-18fe-8e90-4311-1944c3d9fd24
+      responses:
+        200:
+          description: 取得成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/corporations'
+        400:
+          $ref: '#/components/responses/badRequest'
+        500:
+          $ref: '#/components/responses/internalServerError'
+    patch:
+      tags:
+        - Update Corporation
+      summary: 企業情報の一部項目を更新する
+      parameters:
+        - name: corporation_id
+          in: path
+          required: true
+          schema:
+            type: string
+            description: 企業ID
+            example: 8065a472-18fe-8e90-4311-1944c3d9fd24
+      requestBody:
+        description: 企業情報更新
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/corporationPatch'
+      responses:
+        201:
+          description: 取得成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/corporations'
+        400:
+          $ref: '#/components/responses/badRequest'
+        500:
+          $ref: '#/components/responses/internalServerError'
+    delete:
+      tags:
+        - Delete Corporation
+      summary: 指定した企業を削除する
+      parameters:
+        - name: corporation_id
+          in: path
+          required: true
+          schema:
+            type: string
+            description: 企業ID
+            example: 8065a472-18fe-8e90-4311-1944c3d9fd24
+      responses:
+        204:
+          description: 取得成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/corporations'
+        400:
+          $ref: '#/components/responses/badRequest'
+        500:
+          $ref: '#/components/responses/internalServerError'
+components:
+  schemas:
+    corporations:
+      description: 企業情報
+      type: array
+      items:
+       $ref: '#/components/schemas/corporation'
+    corporation:
+      type: object
+      required:
+        - id
+      properties:
+        corporation_id:
+          description: 企業ID
+          type: string
+          example: 8065a472-18fe-8e90-4311-1944c3d9fd24
+        name:
+          description: 企業名
+          type: string
+          example: 株式会社小泉製薬
+        domain:
+          description: 企業ドメイン
+          type: string
+          example: corpDomain
+        number:
+          description: 企業番号
+          type: integer
+          example: 123456
+        corp_type:
+          description: 企業種別
+          type: string
+          example: 株式会社
+    corporationCreate:
+      type: object
+      description: 企業情報登録
+      properties:
+        corporation_id:
+          description: 企業ID
+          type: string
+          example: 8065a472-18fe-8e90-4311-1944c3d9fd24
+          nullable: true
+        name:
+          description: 企業名
+          type: string
+          example: 株式会社小泉製薬
+          nullable: true
+        domain:
+          description: 企業ドメイン
+          type: string
+          example: corpDomain
+          nullable: true
+        number:
+          description: 企業番号
+          type: integer
+          example: 123456
+          nullable: true
+        corp_type:
+          description: 企業種別
+          type: string
+          enum: [
+            '株式会社',
+            '合同会社',
+            '合資会社',
+            '合名会社',
+            ]
+          example: '株式会社'
+          nullable: true
+    corporationPatch:
+      type: object
+      description: 企業情報更新
+      properties:
+        name:
+          description: 企業名
+          type: string
+          example: 株式会社小泉製薬
+          nullable: true
+        domain:
+          description: 企業ドメイン
+          type: string
+          example: corpDomain
+          nullable: true
+        number:
+          description: 企業番号
+          type: integer
+          example: 123456
+          nullable: true
+        corp_type:
+          description: 企業種別
+          type: string
+          enum: [
+            '株式会社',
+            '合同会社',
+            '合資会社',
+            '合名会社',
+            ]
+          example: '株式会社'
+          nullable: true
+    error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: エラーコード
+          example: 400
+        errorInfo:
+          type: object
+          description: 詳細
+          example: bad_request
+          properties:
+            message:
+              type: string
+              description: エラーメッセージ
+              example: リクエストパラメータの内容が不正
+  responses:
+    badRequest:
+      description: リクエストパラメータの内容が不正
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    unauthorizedToken:
+      description: 指定したアクセストークンが無効
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    forbidden:
+      description: リソースへのアクセスが禁止されている
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    notFound:
+      description: 指定したリソースが存在しない
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    internalServerError:
+      description: システム内部で予期せぬエラーが発生した
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    tooManyRequests:
+      description: リクエスト制限の上限を超えた
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    planLimitExceeded:
+      description: 上限人数に達しているため従業員の追加は出来ません
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    nonDeletableResource:
+      description: 削除できないリソースです
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    serviceMaintenance:
+      description: メンテナンスを行っています
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
