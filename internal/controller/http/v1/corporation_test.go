@@ -270,20 +270,18 @@ func Test_CreateCorporation(t *testing.T) {
 	)
 
 	requestBodyStruct := model.CorporationCreate{
-		CorporationId: nil,
-		Name:          "小泉誓約",
-		Domain:        pointer.ToString("koizumi1234"),
-		Number:        pointer.ToInt32(123456),
-		CorpType:      "株式会社",
+		Name:     "小泉誓約",
+		Domain:   "koizumi1234",
+		Number:   123456,
+		CorpType: "株式会社",
 	}
 	data, _ := json.Marshal(requestBodyStruct)
 
 	errRequestBodyStruct := model.CorporationCreate{
-		CorporationId: nil,
-		Name:          "小泉誓約",
-		Domain:        pointer.ToString("koizumi1234"),
-		Number:        pointer.ToInt32(223456),
-		CorpType:      "株式会社",
+		Name:     "小泉誓約",
+		Domain:   "koizumi1234",
+		Number:   223456,
+		CorpType: "株式会社",
 	}
 	errData, _ := json.Marshal(errRequestBodyStruct)
 
@@ -415,10 +413,10 @@ func Test_UpdateCorporation(t *testing.T) {
 	)
 
 	requestBodyStruct := model.CorporationPatch{
-		Name:     "小泉誓約",
+		Name:     pointer.ToString("小泉誓約"),
 		Domain:   pointer.ToString("koizumi1234"),
 		Number:   pointer.ToInt32(123456),
-		CorpType: "株式会社",
+		CorpType: pointer.ToString("株式会社"),
 	}
 	data, _ := json.Marshal(requestBodyStruct)
 
@@ -461,7 +459,7 @@ func Test_UpdateCorporation(t *testing.T) {
 		wantResponse string
 	}{
 		{
-			name: "[正常系] PATCHリクエストが成功し、201ステータスを返却する",
+			name: "[正常系] PATCHリクエストが成功し、200ステータスを返却する",
 			argGenFn: func() *gin.Context {
 				response = httptest.NewRecorder()
 				ctx, _ := gin.CreateTestContext(response)

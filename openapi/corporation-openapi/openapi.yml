@@ -172,11 +172,6 @@ components:
         - number
         - corp_type
       properties:
-        corporation_id:
-          description: 企業ID
-          type: string
-          example: 8065a472-18fe-8e90-4311-1944c3d9fd24
-          nullable: true
         name:
           description: 企業名
           type: string
@@ -185,12 +180,10 @@ components:
           description: 企業ドメイン
           type: string
           example: corpDomain
-          nullable: true
         number:
           description: 企業番号
           type: integer
           example: 123456
-          nullable: true
         corp_type:
           description: 企業種別
           type: string
@@ -204,14 +197,12 @@ components:
     corporationPatch:
       type: object
       description: 企業情報更新
-      required:
-        - name
-        - corp_type
       properties:
         name:
           description: 企業名
           type: string
           example: 株式会社小泉製薬
+          nullable: true
         domain:
           description: 企業ドメイン
           type: string
@@ -232,6 +223,7 @@ components:
             '合名会社',
             ]
           example: '株式会社'
+          nullable: true
     error:
       type: object
       properties:

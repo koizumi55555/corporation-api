@@ -51,7 +51,8 @@ func ValidatePatchCorporationRequest(c *gin.Context,
 	fieldNumber := "number"
 	validateList[fieldNumber] = validation.Validate(
 		corporationPatch.Number,
-		//validation.Match(regexp.MustCompile("[0-9]{1,6}$")),
+		// validation.Length(1, 6),
+		// validation.Match(regexp.MustCompile("[0-9]")),
 	)
 
 	fieldCorpType := "corp_type"
@@ -67,18 +68,21 @@ func ValidatePatchCorporationRequest(c *gin.Context,
 		return "", corporationPatch, apierr.ErrorCodeValidationFailed{}
 	}
 
-	corporationNumberStr := strconv.Itoa(int(*corporationPatch.Number))
-	switch corporationPatch.CorpType {
-	case "株式会社":
-		if corporationNumberStr[0:1] != "1" {
-			// エラー処理: 株式会社の場合、企業番号は1である必要がある
-			return "", corporationPatch, apierr.ErrorCodeValidationFailed{}
+	if corporationPatch.Number != nil && corporationPatch.CorpType != nil {
+		corporationNumberStr := strconv.Itoa(int(*corporationPatch.Number))
+		var coLtd = "株式会社"
+		switch *corporationPatch.CorpType {
+		case coLtd:
+			if corporationNumberStr[0:1] != "1" {
+				// エラー処理: 株式会社の場合、企業番号は1である必要がある
+				return "", corporationPatch, apierr.ErrorCodeValidationFailed{}
 
-		}
-	default:
-		if corporationNumberStr[0:1] > "1" {
-			// エラー処理: その他の企業タイプの場合、企業番号は2以上である必要がある
-			return "", corporationPatch, apierr.ErrorCodeValidationFailed{}
+			}
+		default:
+			if corporationNumberStr[0:1] == "1" {
+				// エラー処理: その他の企業タイプの場合、企業番号は2以上である必要がある
+				return "", corporationPatch, apierr.ErrorCodeValidationFailed{}
+			}
 		}
 	}
 
@@ -117,7 +121,8 @@ func ValidatePostCorporationRequest(c *gin.Context,
 	fieldNumber := "number"
 	validateList[fieldNumber] = validation.Validate(
 		corporationCreate.Number,
-		//validation.Match(regexp.MustCompile("^[0-9]{1,7}$")),
+		// validation.Length(1, 6),
+		// validation.Match(regexp.MustCompile("[0-9]*$")),
 	)
 
 	fieldCorpType := "corp_type"
@@ -126,20 +131,22 @@ func ValidatePostCorporationRequest(c *gin.Context,
 		validation.In("株式会社", "合同会社", "合資会社", "合名会社"),
 	)
 
-	corporationNumberStr := strconv.Itoa(int(*corporationCreate.Number))
+	corporationNumberStr := strconv.Itoa(int(corporationCreate.Number))
+	var coLtd = "株式会社"
 	switch corporationCreate.CorpType {
-	case "株式会社":
+	case coLtd:
 		if corporationNumberStr[0:1] != "1" {
 			// エラー処理: 株式会社の場合、企業番号は1である必要がある
 			return corporationCreate, apierr.ErrorCodeValidationFailed{}
 
 		}
 	default:
-		if corporationNumberStr[0:1] > "1" {
+		if corporationNumberStr[0:1] == "1" {
 			// エラー処理: その他の企業タイプの場合、企業番号は2以上である必要がある
 			return corporationCreate, apierr.ErrorCodeValidationFailed{}
 		}
 	}
+
 	// validation
 	validationErr := (validation.Errors)(validateList).Filter()
 	if validationErr != nil {

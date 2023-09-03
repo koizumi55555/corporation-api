@@ -75,8 +75,8 @@ func (r *corporationRoutes) CreateCorporation(c *gin.Context) {
 	input := entity.Corporation{
 		CorporationID: "",
 		Name:          corporationPost.Name,
-		Domain:        *corporationPost.Domain,
-		Number:        *corporationPost.Number,
+		Domain:        corporationPost.Domain,
+		Number:        corporationPost.Number,
 		CorpType:      corporationPost.CorpType,
 	}
 
@@ -105,10 +105,10 @@ func (r *corporationRoutes) UpdateCorporation(c *gin.Context) {
 	// entity作成
 	input := entity.Corporation{
 		CorporationID: corpID,
-		Name:          corporationPatch.Name,
+		Name:          *corporationPatch.Name,
 		Domain:        *corporationPatch.Domain,
 		Number:        *corporationPatch.Number,
-		CorpType:      corporationPatch.CorpType,
+		CorpType:      *corporationPatch.CorpType,
 	}
 
 	// Update Corporation
