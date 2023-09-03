@@ -1,3 +1,3 @@
 FROM --platform=linux/amd64 postgres:15.3
 
-COPY sql /docker-entrypoint-initdb.d
+COPY ./postgres/init /docker-entrypoint-initdb.d

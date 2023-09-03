@@ -70,11 +70,13 @@ func (cuc *corporationUseCase) UpdateCorporation(
 	if err != nil {
 		return []entity.Corporation{}, err
 	}
+
 	// update
 	corp, err := cuc.masterRepo.UpdateCorporation(input)
 	if err != nil {
 		return []entity.Corporation{}, err
 	}
+
 	return corp, nil
 }
 

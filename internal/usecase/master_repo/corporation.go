@@ -8,11 +8,10 @@ import (
 	"github.com/google/uuid"
 )
 
-var rtnCorporation []schema.Corporation
-
 var updateCorporationColumns = []string{
 	"name",
 	"domain",
+	"number",
 	"corp_type",
 }
 
@@ -31,22 +30,24 @@ func (*WriteCorporation) TableName() string {
 // Get Corporation
 func (r *MasterRepository) GetCorporation(corpID string,
 ) ([]entity.Corporation, apierr.ApiErrF) {
+	var rtnCorporation []schema.Corporation
 	result := r.DBHandler.Conn.
 		Model(&schema.Corporation{}).
 		Where(&schema.Corporation{CorporationID: corpID}).
-		First(rtnCorporation)
+		Find(&rtnCorporation)
 
 	if result.Error != nil {
 		r.l.Errorf("Get Corporation Error", result.Error)
 		return []entity.Corporation{}, apierr.ErrorCodeInternalServerError{}
 	}
 
-	return makeCorporationRes(rtnCorporation), nil
+	return makeCorporationRes(&rtnCorporation), nil
 }
 
 // Get Corporation List
 func (r *MasterRepository) GetCorporationList() (
 	[]entity.Corporation, apierr.ApiErrF) {
+	var rtnCorporation []schema.Corporation
 	result := r.DBHandler.Conn.
 		Model(&schema.Corporation{}).
 		Find(&rtnCorporation)
@@ -55,67 +56,65 @@ func (r *MasterRepository) GetCorporationList() (
 		return []entity.Corporation{}, apierr.ErrorCodeInternalServerError{}
 	}
 
-	return makeCorporationRes(rtnCorporation), nil
+	return makeCorporationRes(&rtnCorporation), nil
 }
 
 // Create Corporation
 func (r *MasterRepository) CreateCorporation(
 	input entity.Corporation,
 ) ([]entity.Corporation, apierr.ApiErrF) {
+	var rtnCorporation []schema.Corporation
 	createSetting := makeCorporationReq(input)
 	result := r.DBHandler.Conn.
-		Create(createSetting).Find(&rtnCorporation)
+		Create(createSetting).
+		Where(&schema.Corporation{CorporationID: createSetting.CorporationID}).
+		Find(&rtnCorporation)
 	if result.Error != nil {
-		r.l.Errorf("Create Corporation List Error", result.Error)
+		r.l.Errorf("Create Corporation Error", result.Error)
 		return []entity.Corporation{}, apierr.ErrorCodeInternalServerError{}
 	}
-
-	//存在しない場合404を返す
-	if len(rtnCorporation) == 0 {
-		r.l.Errorf("Get Corporation List Error", result.Error)
-		return []entity.Corporation{}, apierr.ErrorCodeResourceNotFound{}
-	}
-
-	return makeCorporationRes(rtnCorporation), nil
+	return makeCorporationRes(&rtnCorporation), nil
 }
 
 // Update Corporation
 func (r *MasterRepository) UpdateCorporation(
 	input entity.Corporation,
 ) ([]entity.Corporation, apierr.ApiErrF) {
+	var rtnCorporation []schema.Corporation
+	updateSetting := makeCorporationReq(input)
 	result := r.DBHandler.Conn.
-		Model(input).
+		Model(updateSetting).
 		Select(updateCorporationColumns).
 		Where(&WriteCorporation{
-			CorporationID: input.CorporationID,
+			CorporationID: updateSetting.CorporationID,
 		}).
-		Updates(input).Find(&rtnCorporation)
+		Updates(updateSetting)
 	if result.Error != nil {
 		return []entity.Corporation{}, apierr.ErrorCodeInternalServerError{}
 	}
 
-	//存在しない場合404を返す
-	if len(rtnCorporation) == 0 {
-		return []entity.Corporation{}, apierr.ErrorCodeResourceNotFound{}
+	response := r.DBHandler.Conn.
+		Model(&schema.Corporation{}).
+		Where(&WriteCorporation{
+			CorporationID: updateSetting.CorporationID,
+		}).
+		Find(&rtnCorporation)
+	if response.Error != nil {
+		return []entity.Corporation{}, apierr.ErrorCodeInternalServerError{}
 	}
 
-	return makeCorporationRes(rtnCorporation), nil
+	return makeCorporationRes(&rtnCorporation), nil
 }
 
 // Delete Corporation
 func (r *MasterRepository) DeleteCorporation(corpID string) apierr.ApiErrF {
-	var deleteSetting WriteCorporation
+	var deleteSetting []schema.Corporation
 	result := r.DBHandler.Conn.Debug().
 		Where(&WriteCorporation{
 			CorporationID: corpID,
 		}).Delete(deleteSetting)
 	if result.Error != nil {
 		return apierr.ErrorCodeInternalServerError{}
-	}
-
-	//存在しない場合404を返す
-	if result.RowsAffected == 0 {
-		return apierr.ErrorCodeResourceNotFound{}
 	}
 	return nil
 }
@@ -127,8 +126,9 @@ func (r *MasterRepository) ExistCorporationID(corpID string,
 	result := r.DBHandler.Conn.
 		Model(&schema.Corporation{}).
 		Where(&schema.Corporation{CorporationID: corpID}).
-		First(rtnCorporation)
+		Find(&rtnCorporation)
 	if result.Error != nil {
+		r.l.Errorf("Exist CorporationID Error", result.Error)
 		return apierr.ErrorCodeInternalServerError{}
 	}
 	//存在しない場合404を返す
@@ -145,14 +145,23 @@ func (r *MasterRepository) ExistCorporationName(name string,
 	result := r.DBHandler.Conn.
 		Model(&schema.Corporation{}).
 		Where(&schema.Corporation{Name: name}).
-		First(rtnCorporation)
+		Find(&rtnCorporation)
 	if result.Error != nil {
 		return apierr.ErrorCodeInternalServerError{}
 	}
-	//存在する場合404を返す
-	if len(rtnCorporation) == 0 {
-		return apierr.ErrorCodeResourceNotFound{}
+
+	if len(rtnCorporation) > 0 && rtnCorporation[0].Name == name {
+		return nil
 	}
+	// 存在する場合は409を返す
+	if len(rtnCorporation) != 0 {
+		return apierr.ErrorCodeConflict{}
+	}
+
+	if len(rtnCorporation) > 0 && rtnCorporation[0].Name == name {
+		return nil
+	}
+
 	return nil
 }
 
@@ -169,16 +178,21 @@ func makeCorporationReq(input entity.Corporation) *WriteCorporation {
 	}
 }
 
-func makeCorporationRes(corporation []schema.Corporation) []entity.Corporation {
-	res := make([]entity.Corporation, len(corporation))
-	for i, m := range corporation {
-		res[i] = entity.Corporation{
-			CorporationID: m.CorporationID,
-			Name:          m.Name,
-			Domain:        m.Domain,
-			Number:        m.Number,
-			CorpType:      m.CorpType,
+func makeCorporationRes(corporation *[]schema.Corporation) []entity.Corporation {
+	if corporation != nil {
+		res := make([]entity.Corporation, len(*corporation))
+		for i, m := range *corporation {
+			res[i] = entity.Corporation{
+				CorporationID: m.CorporationID,
+				Name:          m.Name,
+				Domain:        m.Domain,
+				Number:        m.Number,
+				CorpType:      m.CorpType,
+			}
 		}
+		return res
+	} else {
+		return []entity.Corporation{}
 	}
-	return res
+
 }

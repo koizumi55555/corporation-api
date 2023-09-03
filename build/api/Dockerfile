@@ -11,5 +11,5 @@ ARG GOARCH=amd64
 RUN go build -ldflags '-s -w' ./cmd/app
 
 FROM alpine
-COPY --from=builder /build/api /opt/app/
+COPY --from=builder /build/app /opt/app/
 ENTRYPOINT ["/opt/app/api"]

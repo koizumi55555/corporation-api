@@ -1,6 +1,8 @@
 package db
 
 import (
+	"log"
+
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -14,16 +16,18 @@ func NewDBHandler() (*DBHandler, error) {
 	if err != nil {
 		return nil, err
 	}
-	db := new(DBHandler)
-	db.Conn = conn
+	db := &DBHandler{
+		Conn: conn,
+	}
 	return db, nil
 }
 
 func connect() (*gorm.DB, error) {
-	dsn := "host=localhost user=user1 password=password dbname=koizumi port=5432 sslmode=disable"
+	dsn := "host=localhost user=corporation-api-user password=corporation-api-pw dbname=corporation-api port=5432 sslmode=disable"
 	conn, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		panic("failed to connect database")
+		log.Fatalf("Failed to connect to database: %v", err)
+		return nil, err
 	}
-	return conn, err
+	return conn, nil
 }

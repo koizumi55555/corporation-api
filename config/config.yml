@@ -1,0 +1,6 @@
+app:
+   name: corporation-api
+   version: 1.0
+
+logger:
+  log_level: debug
