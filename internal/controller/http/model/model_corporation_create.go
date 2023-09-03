@@ -12,17 +12,14 @@ package model
 // CorporationCreate - 企業情報登録
 type CorporationCreate struct {
 
-	// 企業ID
-	CorporationId *string `json:"corporation_id,omitempty"`
-
 	// 企業名
 	Name string `json:"name"`
 
 	// 企業ドメイン
-	Domain *string `json:"domain,omitempty"`
+	Domain string `json:"domain"`
 
 	// 企業番号
-	Number *int32 `json:"number,omitempty"`
+	Number int32 `json:"number"`
 
 	// 企業種別
 	CorpType string `json:"corp_type"`

@@ -272,11 +272,6 @@ components:
     corporationCreate:
       description: 企業情報登録
       properties:
-        corporation_id:
-          description: 企業ID
-          example: 8065a472-18fe-8e90-4311-1944c3d9fd24
-          nullable: true
-          type: string
         name:
           description: 企業名
           example: 株式会社小泉製薬
@@ -284,12 +279,10 @@ components:
         domain:
           description: 企業ドメイン
           example: corpDomain
-          nullable: true
           type: string
         number:
           description: 企業番号
           example: 123456
-          nullable: true
           type: integer
         corp_type:
           description: 企業種別
@@ -302,7 +295,9 @@ components:
           type: string
       required:
       - corp_type
+      - domain
       - name
+      - number
       type: object
     corporationPatch:
       description: 企業情報更新
@@ -310,6 +305,7 @@ components:
         name:
           description: 企業名
           example: 株式会社小泉製薬
+          nullable: true
           type: string
         domain:
           description: 企業ドメイン
@@ -329,10 +325,8 @@ components:
           - 合資会社
           - 合名会社
           example: 株式会社
+          nullable: true
           type: string
-      required:
-      - corp_type
-      - name
       type: object
     error:
       properties:

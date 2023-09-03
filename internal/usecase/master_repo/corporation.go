@@ -158,10 +158,6 @@ func (r *MasterRepository) ExistCorporationName(name string,
 		return apierr.ErrorCodeConflict{}
 	}
 
-	if len(rtnCorporation) > 0 && rtnCorporation[0].Name == name {
-		return nil
-	}
-
 	return nil
 }
 

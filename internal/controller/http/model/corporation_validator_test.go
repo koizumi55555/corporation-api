@@ -21,22 +21,22 @@ func Test_ValidatePatchCorporationRequest(t *testing.T) {
 	var corporationPatch CorporationPatch
 	testCorpID := "2907a563-978c-4383-a65d-64819821f1f1"
 	baseCorporationPatch := CorporationPatch{
-		Name:     "小泉誓約",
+		Name:     pointer.ToString("小泉誓約"),
 		Domain:   pointer.ToString("koizumi1234"),
 		Number:   pointer.ToInt32(123456),
-		CorpType: "株式会社",
+		CorpType: pointer.ToString("株式会社"),
 	}
 
 	baseCorporationPatchNotDomain := CorporationPatch{
-		Name:     "小泉誓約",
+		Name:     pointer.ToString("小泉誓約"),
 		Number:   pointer.ToInt32(123456),
-		CorpType: "株式会社",
+		CorpType: pointer.ToString("株式会社"),
 	}
 
 	baseCorporationPatchNotNumber := CorporationPatch{
-		Name:     "小泉誓約",
+		Name:     pointer.ToString("小泉誓約"),
 		Domain:   pointer.ToString("koizumi1234"),
-		CorpType: "株式会社",
+		CorpType: pointer.ToString("株式会社"),
 	}
 
 	tests := []struct {
@@ -266,7 +266,7 @@ func Test_ValidatePatchCorporationRequest(t *testing.T) {
 		// 		{
 		// 			"name": "小泉誓約",
 		// 			"domain": "koizumi1234",
-		// 			"number": "てすと",
+		// 			"number": "test",
 		// 			"corp_type":"株式会社"
 		// 		}`)),
 		// 	want_corporationID:    "",
