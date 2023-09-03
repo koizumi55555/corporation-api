@@ -1,0 +1,217 @@
+{
+	"info": {
+		"_postman_id": "bc90b16a-23e4-4032-bc86-435c0dc8375e",
+		"name": "Corporation-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29494689"
+	},
+	"item": [
+		{
+			"name": "Create Corporation",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"set\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData[0].corporation_id).to.exist;\r",
+							"    pm.collectionVariables.set(\"corporation_id\", jsonData[0].corporation_id);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"小泉製薬\",\r\n    \"domain\": \"izumitest\",\r\n\t\"number\": 123456,\r\n\t\"corp_type\":\"株式会社\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/corporation",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"corporation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Corporation",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/v1/corporation/:corporation_id",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"corporation",
+						":corporation_id"
+					],
+					"variable": [
+						{
+							"key": "corporation_id",
+							"value": "{{corporation_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Corporation",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"TEST\",\r\n    \"domain\": \"test2222\",\r\n\t\"number\": 654321,\r\n\t\"corp_type\":\"合同会社\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/corporation/:corporation_id",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"corporation",
+						":corporation_id"
+					],
+					"variable": [
+						{
+							"key": "corporation_id",
+							"value": "{{corporation_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get CorporationList",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"set\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData[0].corporation_id).to.exist;\r",
+							"    pm.collectionVariables.set(\"corporation_id\", jsonData[0].corporation_id);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/v1/corporation",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"corporation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Corporation",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/v1/corporation/:corporation_id",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"corporation",
+						":corporation_id"
+					],
+					"variable": [
+						{
+							"key": "corporation_id",
+							"value": "{{corporation_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "corporation_id",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
