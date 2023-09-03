@@ -4,20 +4,15 @@ import (
 	"context"
 	"koizumi55555/corporation-api/internal/controller/http/httperr/apierr"
 	"koizumi55555/corporation-api/internal/entity"
-	"koizumi55555/corporation-api/pkg/logger"
-
-	"github.com/google/uuid"
 )
 
 type corporationUseCase struct {
 	masterRepo MasterRepository
-	l          *logger.Logger
 }
 
 func NewCorporationUsecase(mRepo MasterRepository) CorporationUseCase {
 	return &corporationUseCase{
 		masterRepo: mRepo,
-		//l:          l,
 	}
 }
 
@@ -38,7 +33,7 @@ func (cuc *corporationUseCase) GetCorporationList(
 ) ([]entity.Corporation, apierr.ApiErrF) {
 	corporations, err := cuc.masterRepo.GetCorporationList()
 	if err != nil {
-		return nil, err
+		return []entity.Corporation{}, err
 	}
 	return corporations, nil
 }
@@ -47,13 +42,11 @@ func (cuc *corporationUseCase) GetCorporationList(
 func (cuc *corporationUseCase) CreateCorporation(
 	ctx context.Context, input entity.Corporation,
 ) ([]entity.Corporation, apierr.ApiErrF) {
-	input.CorporationID = uuid.NewString()
 	// 同名の企業がないか確認
 	err := cuc.masterRepo.ExistCorporationName(input.Name)
 	if err != nil {
 		return []entity.Corporation{}, err
 	}
-
 	// create
 	corp, err := cuc.masterRepo.CreateCorporation(input)
 	if err != nil {
@@ -68,13 +61,13 @@ func (cuc *corporationUseCase) UpdateCorporation(
 ) ([]entity.Corporation, apierr.ApiErrF) {
 	// 指定されたCorporationIDが存在するか確認
 	err := cuc.masterRepo.ExistCorporationID(input.CorporationID)
-	if err == nil {
+	if err != nil {
 		return []entity.Corporation{}, err
 	}
 
 	// 同名の企業がないか確認
 	err = cuc.masterRepo.ExistCorporationName(input.Name)
-	if err == nil {
+	if err != nil {
 		return []entity.Corporation{}, err
 	}
 	// update
@@ -91,7 +84,7 @@ func (cuc *corporationUseCase) DeleteCorporation(
 ) apierr.ApiErrF {
 	// 指定されたCorporationIDが存在するか確認
 	err := cuc.masterRepo.ExistCorporationID(corp)
-	if err == nil {
+	if err != nil {
 		return err
 	}
 

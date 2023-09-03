@@ -30,10 +30,10 @@ func Test_GetCorporation(t *testing.T) {
 	corporationSetting := []entity.Corporation{
 		{
 			CorporationID: "efec6797-d0a5-c81f-3ff0-11f2eecf4a01",
-			Name:          "Test Taro",
-			Domain:        "",
-			Number:        0,
-			CorpType:      "",
+			Name:          "小泉誓約",
+			Domain:        "koizumi1234",
+			Number:        123456,
+			CorpType:      "株式会社",
 		},
 	}
 	type args struct {
@@ -62,18 +62,6 @@ func Test_GetCorporation(t *testing.T) {
 			name: "[異常系] 企業情報取得時に ErrorCodeInternalServerErrorが返却されること",
 			mock: func() {
 				mRepo.EXPECT().GetCorporation(testCorpID).
-					Return(corporationSetting, nil).Times(1)
-			},
-			args: args{
-				corpID: testCorpID,
-			},
-			want:      []entity.Corporation{},
-			wantError: nil,
-		},
-		{
-			name: "[異常系] 指定の企業情報が存在しないときNotFoundが返却されること",
-			mock: func() {
-				mRepo.EXPECT().GetCorporation(testCorpID).
 					Return(nil, &apierr.ErrorCodeInternalServerError{}).Times(1)
 			},
 			args: args{
@@ -81,6 +69,18 @@ func Test_GetCorporation(t *testing.T) {
 			},
 			want:      []entity.Corporation{},
 			wantError: &apierr.ErrorCodeInternalServerError{},
+		},
+		{
+			name: "[異常系] 指定の企業情報が存在しないときNotFoundが返却されること",
+			mock: func() {
+				mRepo.EXPECT().GetCorporation(testCorpID).
+					Return(nil, &apierr.ErrorCodeResourceNotFound{}).Times(1)
+			},
+			args: args{
+				corpID: testCorpID,
+			},
+			want:      []entity.Corporation{},
+			wantError: &apierr.ErrorCodeResourceNotFound{},
 		},
 	}
 	for _, tt := range tests {
@@ -110,17 +110,17 @@ func Test_GetCorporationList(t *testing.T) {
 	corporationSetting := []entity.Corporation{
 		{
 			CorporationID: "efec6797-d0a5-c81f-3ff0-11f2eecf4a01",
-			Name:          "Test Taro",
-			Domain:        "",
-			Number:        0,
-			CorpType:      "",
+			Name:          "小泉誓約",
+			Domain:        "koizumi1234",
+			Number:        123456,
+			CorpType:      "株式会社",
 		},
 		{
 			CorporationID: "efec6797-d0a5-c81f-3ff0-11f2eecf4a02",
-			Name:          "Test Taro",
-			Domain:        "",
-			Number:        0,
-			CorpType:      "",
+			Name:          "小泉製薬",
+			Domain:        "koizumiS",
+			Number:        123457,
+			CorpType:      "株式会社",
 		},
 	}
 
@@ -143,16 +143,16 @@ func Test_GetCorporationList(t *testing.T) {
 			name: "[異常系] 企業情報取得時に ErrorCodeInternalServerErrorが返却されること",
 			mock: func() {
 				mRepo.EXPECT().GetCorporationList().
-					Return(corporationSetting, nil).Times(1)
+					Return(nil, &apierr.ErrorCodeInternalServerError{}).Times(1)
 			},
 			want:      []entity.Corporation{},
-			wantError: nil,
+			wantError: &apierr.ErrorCodeInternalServerError{},
 		},
 		{
 			name: "[異常系] 企業情報が存在しないときNotFoundが返却されること",
 			mock: func() {
 				mRepo.EXPECT().GetCorporationList().
-					Return(nil, &apierr.ErrorCodeInternalServerError{}).Times(1)
+					Return(nil, &apierr.ErrorCodeResourceNotFound{}).Times(1)
 			},
 			want:      []entity.Corporation{},
 			wantError: &apierr.ErrorCodeResourceNotFound{},
@@ -181,35 +181,30 @@ func Test_CreateCorporation(t *testing.T) {
 		mRepo *mock.MockMasterRepository
 	)
 
-	const (
-		testCorpName = "TEST"
-	)
+	var testCorpName = "小泉誓約"
 	var testCorpID = uuid.New().String()
+
 	corporationReq := entity.Corporation{
 		CorporationID: testCorpID,
-		Name:          "Test Taro",
-		Domain:        "",
-		Number:        0,
-		CorpType:      "",
+		Name:          testCorpName,
+		Domain:        "koizumi1234",
+		Number:        123456,
+		CorpType:      "株式会社",
 	}
 
 	corporationSetting := []entity.Corporation{
 		{
 			CorporationID: testCorpID,
-			Name:          "Test Taro",
-			Domain:        "",
-			Number:        0,
-			CorpType:      "",
+			Name:          testCorpName,
+			Domain:        "koizumi1234",
+			Number:        123456,
+			CorpType:      "株式会社",
 		},
 	}
 
-	type args struct {
-		corpID string
-	}
 	tests := []struct {
 		name      string
 		mock      func()
-		args      args
 		want      []entity.Corporation
 		wantError apierr.ApiErrF
 	}{
@@ -230,18 +225,7 @@ func Test_CreateCorporation(t *testing.T) {
 				mRepo.EXPECT().ExistCorporationName(testCorpName).
 					Return(nil).Times(1)
 				mRepo.EXPECT().CreateCorporation(corporationReq).
-					Return(entity.Corporation{}, &apierr.ErrorCodeInternalServerError{}).Times(1)
-			},
-			want:      []entity.Corporation{},
-			wantError: nil,
-		},
-		{
-			name: "[異常系] 企業情報が存在しないときNotFoundが返却されること",
-			mock: func() {
-				mRepo.EXPECT().ExistCorporationName(testCorpName).
-					Return(nil).Times(1)
-				mRepo.EXPECT().CreateCorporation(corporationReq).
-					Return(entity.Corporation{}, &apierr.ErrorCodeInternalServerError{}).Times(1)
+					Return([]entity.Corporation{}, &apierr.ErrorCodeInternalServerError{}).Times(1)
 			},
 			want:      []entity.Corporation{},
 			wantError: &apierr.ErrorCodeInternalServerError{},
@@ -253,7 +237,7 @@ func Test_CreateCorporation(t *testing.T) {
 					Return(&apierr.ErrorCodeConflict{}).Times(1)
 			},
 			want:      []entity.Corporation{},
-			wantError: &apierr.ErrorCodeInternalServerError{},
+			wantError: &apierr.ErrorCodeConflict{},
 		},
 	}
 	for _, tt := range tests {
@@ -280,39 +264,39 @@ func Test_UpdateCorporation(t *testing.T) {
 		mRepo *mock.MockMasterRepository
 	)
 
-	const testCorpName = "TEST"
-	var testCorpID = uuid.New().String()
+	var testCorpName = "小泉誓約"
+	var testCorpID = "efec6797-d0a5-c81f-3ff0-11f2eecf4a01"
 	corporationReq := entity.Corporation{
 		CorporationID: testCorpID,
-		Name:          "Test Taro",
-		Domain:        "",
-		Number:        0,
-		CorpType:      "",
+		Name:          testCorpName,
+		Domain:        "koizumi1234",
+		Number:        123456,
+		CorpType:      "株式会社",
 	}
 
 	corporationSetting := []entity.Corporation{
 		{
 			CorporationID: testCorpID,
-			Name:          "Test Taro",
-			Domain:        "",
-			Number:        0,
-			CorpType:      "",
+			Name:          testCorpName,
+			Domain:        "koizumi1234",
+			Number:        123456,
+			CorpType:      "株式会社",
 		},
 	}
 
-	type args struct {
-		corp entity.Corporation
-	}
 	tests := []struct {
 		name      string
 		mock      func()
-		args      args
 		want      []entity.Corporation
 		wantError apierr.ApiErrF
 	}{
 		{
 			name: "[正常系] 企業更新成功しその企業情報が返却されること",
 			mock: func() {
+				mRepo.EXPECT().ExistCorporationID(testCorpID).
+					Return(nil).Times(1)
+				mRepo.EXPECT().ExistCorporationName(testCorpName).
+					Return(nil).Times(1)
 				mRepo.EXPECT().UpdateCorporation(corporationReq).
 					Return(corporationSetting, nil).Times(1)
 			},
@@ -320,48 +304,37 @@ func Test_UpdateCorporation(t *testing.T) {
 			wantError: nil,
 		},
 		{
-			name: "[異常系] 企業情報取得時に ErrorCodeInternalServerErrorが返却されること",
+			name: "[異常系] 企業情報取得時にErrorCodeInternalServerErrorが返却されること",
 			mock: func() {
-				mRepo.EXPECT().UpdateCorporation(corporationReq).
-					Return(entity.Corporation{}, &apierr.ErrorCodeInternalServerError{}).Times(1)
-			},
-			want:      []entity.Corporation{},
-			wantError: nil,
-		},
-		{
-			name: "[異常系] 企業情報が存在しないときNotFoundが返却されること",
-			mock: func() {
-				mRepo.EXPECT().GetCorporation(corporationSetting).
-					Return(entity.Corporation{}, &apierr.ErrorCodeInternalServerError{}).Times(1)
+				mRepo.EXPECT().ExistCorporationID(testCorpID).
+					Return(nil).Times(1)
 				mRepo.EXPECT().ExistCorporationName(testCorpName).
 					Return(nil).Times(1)
-				mRepo.EXPECT().UpdateCorporation(corporationSetting).
-					Return(entity.Corporation{}, &apierr.ErrorCodeInternalServerError{}).Times(1)
+				mRepo.EXPECT().UpdateCorporation(corporationReq).
+					Return([]entity.Corporation{}, &apierr.ErrorCodeInternalServerError{}).Times(1)
 			},
 			want:      []entity.Corporation{},
 			wantError: &apierr.ErrorCodeInternalServerError{},
 		},
 		{
-			name: "[異常系] 指定した企業が存在しないとき   が返却されること",
+			name: "[異常系] 指定した企業が存在しないときNotFoundが返却されること",
 			mock: func() {
-				mRepo.EXPECT().GetCorporation(corporationSetting).
-					Return(entity.Corporation{}, &apierr.ErrorCodeInternalServerError{}).Times(1)
-				mRepo.EXPECT().ExistCorporationName(testCorpName).
-					Return(&apierr.ErrorCodeInternalServerError{}).Times(1)
+				mRepo.EXPECT().ExistCorporationID(testCorpID).
+					Return(&apierr.ErrorCodeResourceNotFound{}).Times(1)
 			},
 			want:      []entity.Corporation{},
-			wantError: &apierr.ErrorCodeInternalServerError{},
+			wantError: &apierr.ErrorCodeResourceNotFound{},
 		},
 		{
 			name: "[異常系] 同名の企業が存在するときConflictが返却されること",
 			mock: func() {
-				mRepo.EXPECT().GetCorporation(corporationSetting).
-					Return(entity.Corporation{}, &apierr.ErrorCodeInternalServerError{}).Times(1)
+				mRepo.EXPECT().ExistCorporationID(testCorpID).
+					Return(nil).Times(1)
 				mRepo.EXPECT().ExistCorporationName(testCorpName).
 					Return(&apierr.ErrorCodeConflict{}).Times(1)
 			},
 			want:      []entity.Corporation{},
-			wantError: &apierr.ErrorCodeInternalServerError{},
+			wantError: &apierr.ErrorCodeConflict{},
 		},
 	}
 	for _, tt := range tests {
@@ -370,13 +343,13 @@ func Test_UpdateCorporation(t *testing.T) {
 			uc, mRepo = initCorporationUseCase(t)
 			tt.mock()
 			got, gotError := uc.UpdateCorporation(
-				context.Background(), tt.args.corp)
+				context.Background(), corporationReq)
 			if diff := cmp.Diff(got, tt.want); diff != "" {
-				t.Errorf("CorporationUseCase.GetCorporation() = %s", diff)
+				t.Errorf("CorporationUseCase.UpdateCorporation() = %s", diff)
 			}
 
 			if diff := cmp.Diff(gotError, tt.wantError); diff != "" {
-				t.Errorf("CorporationUseCase.GetCorporation() = %s", diff)
+				t.Errorf("CorporationUseCase.UpdateCorporation() = %s", diff)
 			}
 		})
 	}
@@ -388,45 +361,40 @@ func Test_DeleteCorporation(t *testing.T) {
 		mRepo *mock.MockMasterRepository
 	)
 
-	const (
-		testCorpID   = "3d407c8d-73e2-4d98-84eb-612e1adb9f29"
-		testCorpName = "TEST"
-	)
-
-	corporationSetting := entity.Corporation{
-		CorporationID: testCorpID,
-		Name:          testCorpName,
-		Domain:        "",
-		Number:        0,
-		CorpType:      "",
-	}
+	var testCorpID = "efec6797-d0a5-c81f-3ff0-11f2eecf4a01"
 
 	tests := []struct {
-		name       string
-		mock       func()
-		argsCropID string
-		want       entity.Corporation
-		wantError  apierr.ApiErrF
+		name      string
+		mock      func()
+		wantError apierr.ApiErrF
 	}{
 		{
-			name: "[正常系] 企業更新成功しその企業情報が返却されること",
+			name: "[正常系] 企業削除されること",
 			mock: func() {
-				corporationSetting.CorporationID = uuid.NewString()
+				mRepo.EXPECT().ExistCorporationID(testCorpID).
+					Return(nil).Times(1)
 				mRepo.EXPECT().DeleteCorporation(testCorpID).
 					Return(nil).Times(1)
 			},
-			argsCropID: testCorpID,
-			want:       corporationSetting,
-			wantError:  nil,
+			wantError: nil,
 		},
 		{
-			name: "[異常系] 企業情報取得時に ErrorCodeInternalServerErrorが返却されること",
+			name: "[異常系] 企業削除時にErrorCodeInternalServerErrorが返却されること",
 			mock: func() {
+				mRepo.EXPECT().ExistCorporationID(testCorpID).
+					Return(nil).Times(1)
 				mRepo.EXPECT().DeleteCorporation(testCorpID).
-					Return(entity.Corporation{}, &apierr.ErrorCodeInternalServerError{}).Times(1)
+					Return(&apierr.ErrorCodeInternalServerError{}).Times(1)
 			},
-			want:      entity.Corporation{},
-			wantError: nil,
+			wantError: &apierr.ErrorCodeInternalServerError{},
+		},
+		{
+			name: "[異常系] 指定した企業が存在しないときNotFoundが返却されること",
+			mock: func() {
+				mRepo.EXPECT().ExistCorporationID(testCorpID).
+					Return(&apierr.ErrorCodeResourceNotFound{}).Times(1)
+			},
+			wantError: &apierr.ErrorCodeResourceNotFound{},
 		},
 	}
 	for _, tt := range tests {
@@ -435,9 +403,9 @@ func Test_DeleteCorporation(t *testing.T) {
 			uc, mRepo = initCorporationUseCase(t)
 			tt.mock()
 			gotError := uc.DeleteCorporation(
-				context.Background(), tt.argsCropID)
+				context.Background(), testCorpID)
 			if diff := cmp.Diff(gotError, tt.wantError); diff != "" {
-				t.Errorf("CorporationUseCase.GetCorporation() = %s", diff)
+				t.Errorf("CorporationUseCase.DeleteCorporation() = %s", diff)
 			}
 		})
 	}

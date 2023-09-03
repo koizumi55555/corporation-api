@@ -3,3 +3,4 @@ model_corporation.go
 model_corporation_create.go
 model_corporation_patch.go
 model_error.go
+model_error_error_info.go

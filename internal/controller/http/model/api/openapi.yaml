@@ -280,7 +280,6 @@ components:
         name:
           description: 企業名
           example: 株式会社小泉製薬
-          nullable: true
           type: string
         domain:
           description: 企業ドメイン
@@ -300,8 +299,10 @@ components:
           - 合資会社
           - 合名会社
           example: 株式会社
-          nullable: true
           type: string
+      required:
+      - corp_type
+      - name
       type: object
     corporationPatch:
       description: 企業情報更新
@@ -309,7 +310,6 @@ components:
         name:
           description: 企業名
           example: 株式会社小泉製薬
-          nullable: true
           type: string
         domain:
           description: 企業ドメイン
@@ -329,19 +329,24 @@ components:
           - 合資会社
           - 合名会社
           example: 株式会社
-          nullable: true
           type: string
+      required:
+      - corp_type
+      - name
       type: object
     error:
       properties:
         code:
           description: エラーコード
-          example: 400
-          type: integer
-        type:
-          description: エラータイプ
-          example: bad_request
+          example: "400"
           type: string
+        errorInfo:
+          $ref: '#/components/schemas/error_errorInfo'
+      type: object
+    error_errorInfo:
+      description: 詳細
+      example: bad_request
+      properties:
         message:
           description: エラーメッセージ
           example: リクエストパラメータの内容が不正

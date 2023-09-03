@@ -13,7 +13,7 @@ package model
 type CorporationPatch struct {
 
 	// 企業名
-	Name *string `json:"name,omitempty"`
+	Name string `json:"name"`
 
 	// 企業ドメイン
 	Domain *string `json:"domain,omitempty"`
@@ -22,5 +22,5 @@ type CorporationPatch struct {
 	Number *int32 `json:"number,omitempty"`
 
 	// 企業種別
-	CorpType *string `json:"corp_type,omitempty"`
+	CorpType string `json:"corp_type"`
 }

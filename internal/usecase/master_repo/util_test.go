@@ -1,7 +1,7 @@
 package master_repo
 
 import (
-	"koizumi55555/corporation-api/build/db"
+	db "koizumi55555/corporation-api/build/db/sql"
 	"testing"
 
 	"gorm.io/gorm"
@@ -9,21 +9,14 @@ import (
 
 func makeMasterRepo(t *testing.T) *MasterRepository {
 	t.Helper()
-
-	// l, err := logger.New(config.LoggerConfig{Encoding: "console", Level: "debug")
-	// if err != nil {
-	// 	t.Fatal(err)
-	// }
-	dbh, err := db.NewDBHandler("localhost", "5432", "corporation-api-user",
-		"corporation-api", "corporation-api-pw", "disable", "", 1)
+	dbh, err := db.NewDBHandler()
 	if err != nil {
-		dbh, err = db.NewDBHandler("postgres", "5432", "corporation-api-user",
-			"corporation-api", "corporation-api-pw", "disable", "", 1)
+		dbh, err = db.NewDBHandler()
 		if err != nil {
 			t.Fatal(err)
 		}
 	}
-	return New(dbh, l)
+	return New(dbh)
 }
 
 func TruncateDB(t *testing.T, db *db.DBHandler) {
