@@ -10,9 +10,10 @@ import (
 
 func NewRouter(
 	handler *gin.Engine, cfg *config.Config,
-	corporationUC usecase.CorporationUseCase, l *logger.Logger,
+	corporationUC usecase.CorporationUseCase,
+	queueUC usecase.Queue, l *logger.Logger,
 ) error {
 	v1h := handler.Group("/v1")
-	NewCorporationRoutes(v1h, corporationUC, l)
+	NewCorporationRoutes(v1h, corporationUC, queueUC, l)
 	return nil
 }

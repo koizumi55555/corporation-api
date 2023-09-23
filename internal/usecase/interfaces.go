@@ -26,4 +26,9 @@ type (
 		ExistCorporationID(corp string) apierr.ApiErrF
 		ExistCorporationName(name string) apierr.ApiErrF
 	}
+
+	Queue interface {
+		SendMessage(ctx context.Context,
+			err apierr.ApiErrF) apierr.ApiErrF
+	}
 )

@@ -14,11 +14,12 @@ import (
 type corporationRoutes struct {
 	l             *logger.Logger
 	corporationUC usecase.CorporationUseCase
+	queueUC       usecase.Queue
 }
 
 func NewCorporationRoutes(handler *gin.RouterGroup,
-	corporationUC usecase.CorporationUseCase, l *logger.Logger) {
-	r := &corporationRoutes{l, corporationUC}
+	corporationUC usecase.CorporationUseCase, queueUC usecase.Queue, l *logger.Logger) {
+	r := &corporationRoutes{l, corporationUC, queueUC}
 	handler.GET("/corporation/:corporation_id", r.GetCorporation)
 	handler.GET("/corporation", r.GetCorporationList)
 	handler.POST("/corporation", r.CreateCorporation)
@@ -39,6 +40,10 @@ func (r *corporationRoutes) GetCorporation(c *gin.Context) {
 	// Get Corporation
 	corp, err := r.corporationUC.GetCorporation(c, corpID)
 	if err != nil {
+		if sendMessageErr := r.queueUC.SendMessage(c, err); sendMessageErr == nil {
+			r.l.Warn(err.Error().ErrorCode)
+			httperr.ErrorResponse(c, sendMessageErr)
+		}
 		r.l.Warn(err.Error().ErrorCode)
 		httperr.ErrorResponse(c, err)
 		return
@@ -52,6 +57,10 @@ func (r *corporationRoutes) GetCorporationList(c *gin.Context) {
 	// Get Corporation List
 	corpList, err := r.corporationUC.GetCorporationList(c)
 	if err != nil {
+		if sendMessageErr := r.queueUC.SendMessage(c, err); sendMessageErr == nil {
+			r.l.Warn(err.Error().ErrorCode)
+			httperr.ErrorResponse(c, sendMessageErr)
+		}
 		r.l.Warn(err.Error().ErrorCode)
 		httperr.ErrorResponse(c, err)
 		return
@@ -83,6 +92,10 @@ func (r *corporationRoutes) CreateCorporation(c *gin.Context) {
 	// Create Corporation
 	corp, err := r.corporationUC.CreateCorporation(c, input)
 	if err != nil {
+		if sendMessageErr := r.queueUC.SendMessage(c, err); sendMessageErr == nil {
+			r.l.Warn(err.Error().ErrorCode)
+			httperr.ErrorResponse(c, sendMessageErr)
+		}
 		r.l.Warn(err.Error().ErrorCode)
 		httperr.ErrorResponse(c, err)
 		return
@@ -114,6 +127,10 @@ func (r *corporationRoutes) UpdateCorporation(c *gin.Context) {
 	// Update Corporation
 	corp, err := r.corporationUC.UpdateCorporation(c, input)
 	if err != nil {
+		if sendMessageErr := r.queueUC.SendMessage(c, err); sendMessageErr == nil {
+			r.l.Warn(err.Error().ErrorCode)
+			httperr.ErrorResponse(c, sendMessageErr)
+		}
 		r.l.Warn(err.Error().ErrorCode)
 		httperr.ErrorResponse(c, err)
 		return
@@ -134,6 +151,10 @@ func (r *corporationRoutes) DeleteCorporation(c *gin.Context) {
 	}
 	err := r.corporationUC.DeleteCorporation(c, corpID)
 	if err != nil {
+		if sendMessageErr := r.queueUC.SendMessage(c, err); sendMessageErr == nil {
+			r.l.Warn(err.Error().ErrorCode)
+			httperr.ErrorResponse(c, sendMessageErr)
+		}
 		r.l.Warn(err.Error().ErrorCode)
 		httperr.ErrorResponse(c, err)
 		return
