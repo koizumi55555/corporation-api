@@ -9,8 +9,9 @@ import (
 type (
 	// Config -.
 	Config struct {
-		App    `yaml:"app"`
-		Logger `yaml:"logger"`
+		App         `yaml:"app"`
+		Logger      `yaml:"logger"`
+		QueueConfig `yaml:"queueConfig"`
 	}
 
 	// App -.
@@ -22,6 +23,13 @@ type (
 	// Log -.
 	Logger struct {
 		Level string `env-required:"true" yaml:"log_level"   env:"LOG_LEVEL"`
+	}
+
+	// QueueConfig -.
+	QueueConfig struct {
+		Region   string `env-required:"true" yaml:"region" env:"SQS_REGION"`
+		Endpoint string `env-required:"false" yaml:"endpoint" env:"SQS_ENDPOINT"`
+		Url      string `env-required:"false" yaml:"url" env:"QUEUE_URL"`
 	}
 )
 

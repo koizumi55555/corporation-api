@@ -7,6 +7,7 @@ import (
 	v1 "koizumi55555/corporation-api/internal/controller/http/v1"
 	"koizumi55555/corporation-api/internal/usecase"
 	master_repo "koizumi55555/corporation-api/internal/usecase/master_repo"
+	"koizumi55555/corporation-api/internal/usecase/queue"
 	"koizumi55555/corporation-api/pkg/logger"
 
 	"github.com/gin-gonic/gin"
@@ -21,9 +22,10 @@ func Run(cfg *config.Config) error {
 	}
 
 	mRepo := master_repo.New(masterDBH)
+	qu := queue.NewQueueUsecase(l, &cfg.QueueConfig)
 	corporationUC := usecase.NewCorporationUsecase(mRepo)
 	handler := gin.New()
-	if err := v1.NewRouter(handler, cfg, corporationUC, l); err != nil {
+	if err := v1.NewRouter(handler, cfg, corporationUC, qu, l); err != nil {
 		return fmt.Errorf("/v1 handler error: %w", err)
 	}
 	err = handler.Run(":8080")
