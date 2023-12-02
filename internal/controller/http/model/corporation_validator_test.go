@@ -252,48 +252,28 @@ func Test_ValidatePatchCorporationRequest(t *testing.T) {
 			want_CorporationPatch: corporationPatch,
 			wantApiErrResponse:    apierr.ErrorCodeValidationFailed{},
 		},
-		// {
-		// 	name: "[異常系] validation error number numerical value",
-		// 	mockParam: mockParam{
-		// 		Params: []gin.Param{
-		// 			{
-		// 				Key:   "corporation_id",
-		// 				Value: testCorpID,
-		// 			},
-		// 		},
-		// 	},
-		// 	requestBody: bytes.NewBuffer([]byte(`
-		// 		{
-		// 			"name": "小泉誓約",
-		// 			"domain": "koizumi1234",
-		// 			"number": "test",
-		// 			"corp_type":"株式会社"
-		// 		}`)),
-		// 	want_corporationID:    "",
-		// 	want_CorporationPatch: corporationPatch,
-		// 	wantApiErrResponse:    apierr.ErrorCodeValidationFailed{},
-		// },
-		// {
-		// 	name: "[異常系] validation error number over",
-		// 	mockParam: mockParam{
-		// 		Params: []gin.Param{
-		// 			{
-		// 				Key:   "corporation_id",
-		// 				Value: testCorpID,
-		// 			},
-		// 		},
-		// 	},
-		// 	requestBody: bytes.NewBuffer([]byte(`
-		// 		{
-		// 			"name": "小泉誓約",
-		// 			"domain": "koizumi1234",
-		// 			"number": 1234567,
-		// 			"corp_type":"株式会社"
-		// 		}`)),
-		// 	want_corporationID:    "",
-		// 	want_CorporationPatch: corporationPatch,
-		// 	wantApiErrResponse:    apierr.ErrorCodeValidationFailed{},
-		// },
+
+		{
+			name: "[異常系] validation error number over",
+			mockParam: mockParam{
+				Params: []gin.Param{
+					{
+						Key:   "corporation_id",
+						Value: testCorpID,
+					},
+				},
+			},
+			requestBody: bytes.NewBuffer([]byte(`
+				{
+					"name": "小泉誓約",
+					"domain": "koizumi1234",
+					"number": 1234567,
+					"corp_type":"株式会社"
+				}`)),
+			want_corporationID:    "",
+			want_CorporationPatch: corporationPatch,
+			wantApiErrResponse:    apierr.ErrorCodeValidationFailed{},
+		},
 		{
 			name: "[異常系] validation error not corp type  ",
 			mockParam: mockParam{

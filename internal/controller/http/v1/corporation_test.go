@@ -67,6 +67,29 @@ func Test_GetCorporation(t *testing.T) {
 		wantResponse string
 	}{
 		{
+			name: "[異常系] 企業情報が取得できない場合",
+			argGenFn: func() *gin.Context {
+				response = httptest.NewRecorder()
+				ctx, _ := gin.CreateTestContext(response)
+				mockRequest, _ := http.NewRequest("GET",
+					"/corporation/"+testCorpID, nil)
+				ctx.Request = mockRequest
+				ctx.Params = []gin.Param{
+					{
+						Key:   "corporation_id",
+						Value: testCorpID,
+					},
+				}
+				return ctx
+			},
+			mock: func() {
+				uc.EXPECT().GetCorporation(gomock.Any(), testCorpID).
+					Return([]entity.Corporation{}, &apierr.ErrorCodeInternalServerError{}).Times(1)
+			},
+			wantCode:     http.StatusInternalServerError,
+			wantResponse: `{"error_message":"internal_server_error"}`,
+		},
+		{
 			name: "[正常系] GETリクエストが成功し、200ステータスを返却する",
 			argGenFn: func() *gin.Context {
 				response = httptest.NewRecorder()
@@ -109,30 +132,7 @@ func Test_GetCorporation(t *testing.T) {
 				// 呼び出しなし
 			},
 			wantCode:     http.StatusBadRequest,
-			wantResponse: `{"error_code":"validation_failed","error_message":""}`,
-		},
-		{
-			name: "[異常系] 企業情報が取得できない場合",
-			argGenFn: func() *gin.Context {
-				response = httptest.NewRecorder()
-				ctx, _ := gin.CreateTestContext(response)
-				mockRequest, _ := http.NewRequest("GET",
-					"/corporation/"+testCorpID, nil)
-				ctx.Request = mockRequest
-				ctx.Params = []gin.Param{
-					{
-						Key:   "corporation_id",
-						Value: testCorpID,
-					},
-				}
-				return ctx
-			},
-			mock: func() {
-				uc.EXPECT().GetCorporation(gomock.Any(), testCorpID).
-					Return([]entity.Corporation{}, &apierr.ErrorCodeInternalServerError{}).Times(1)
-			},
-			wantCode:     http.StatusInternalServerError,
-			wantResponse: `{"error_code":"internal_server_error","error_message":""}`,
+			wantResponse: `{"error_message":"validation_failed"}`,
 		},
 	}
 	for _, tt := range tests {
@@ -235,7 +235,7 @@ func Test_GetCorporationList(t *testing.T) {
 					Return([]entity.Corporation{}, &apierr.ErrorCodeInternalServerError{}).Times(1)
 			},
 			wantCode:     http.StatusInternalServerError,
-			wantResponse: `{"error_code":"internal_server_error","error_message":""}`,
+			wantResponse: `{"error_message":"internal_server_error"}`,
 		},
 	}
 	for _, tt := range tests {
@@ -343,6 +343,24 @@ func Test_CreateCorporation(t *testing.T) {
 			wantResponse: wantCorporation,
 		},
 		{
+			name: "[異常系] validationErr",
+			argGenFn: func() *gin.Context {
+				response = httptest.NewRecorder()
+				ctx, _ := gin.CreateTestContext(response)
+				mockRequest, _ := http.NewRequest("POST",
+					"/corporation", nil)
+				ctx.Request = mockRequest
+				reader := strings.NewReader(string(errData))
+				ctx.Request.Body = io.NopCloser(reader)
+				return ctx
+			},
+			mock: func() {
+				// 呼び出されない
+			},
+			wantCode:     http.StatusBadRequest,
+			wantResponse: `{"error_message":"validation_failed"}`,
+		},
+		{
 			name: "[異常系] 企業情報が取得できない場合",
 			argGenFn: func() *gin.Context {
 				response = httptest.NewRecorder()
@@ -359,25 +377,7 @@ func Test_CreateCorporation(t *testing.T) {
 					Return([]entity.Corporation{}, &apierr.ErrorCodeInternalServerError{}).Times(1)
 			},
 			wantCode:     http.StatusInternalServerError,
-			wantResponse: `{"error_code":"internal_server_error","error_message":""}`,
-		},
-		{
-			name: "[異常系] validationErr",
-			argGenFn: func() *gin.Context {
-				response = httptest.NewRecorder()
-				ctx, _ := gin.CreateTestContext(response)
-				mockRequest, _ := http.NewRequest("POST",
-					"/corporation", nil)
-				ctx.Request = mockRequest
-				reader := strings.NewReader(string(errData))
-				ctx.Request.Body = io.NopCloser(reader)
-				return ctx
-			},
-			mock: func() {
-				// 呼び出されない
-			},
-			wantCode:     http.StatusBadRequest,
-			wantResponse: `{"error_code":"validation_failed","error_message":""}`,
+			wantResponse: `{"error_message":"internal_server_error"}`,
 		},
 	}
 	for _, tt := range tests {
@@ -459,6 +459,31 @@ func Test_UpdateCorporation(t *testing.T) {
 		wantResponse string
 	}{
 		{
+			name: "[異常系] 企業情報が取得できない場合",
+			argGenFn: func() *gin.Context {
+				response = httptest.NewRecorder()
+				ctx, _ := gin.CreateTestContext(response)
+				mockRequest, _ := http.NewRequest("DELETE",
+					"/corporation/"+testCorpID, nil)
+				ctx.Request = mockRequest
+				ctx.Params = []gin.Param{
+					{
+						Key:   "corporation_id",
+						Value: testCorpID,
+					},
+				}
+				reader := strings.NewReader(string(data))
+				ctx.Request.Body = io.NopCloser(reader)
+				return ctx
+			},
+			mock: func() {
+				uc.EXPECT().UpdateCorporation(gomock.Any(), corporationRequest).
+					Return([]entity.Corporation{}, &apierr.ErrorCodeInternalServerError{}).Times(1)
+			},
+			wantCode:     http.StatusInternalServerError,
+			wantResponse: `{"error_message":"internal_server_error"}`,
+		},
+		{
 			name: "[正常系] PATCHリクエストが成功し、200ステータスを返却する",
 			argGenFn: func() *gin.Context {
 				response = httptest.NewRecorder()
@@ -505,32 +530,7 @@ func Test_UpdateCorporation(t *testing.T) {
 				// 呼び出しなし
 			},
 			wantCode:     http.StatusBadRequest,
-			wantResponse: `{"error_code":"validation_failed","error_message":""}`,
-		},
-		{
-			name: "[異常系] 企業情報が取得できない場合",
-			argGenFn: func() *gin.Context {
-				response = httptest.NewRecorder()
-				ctx, _ := gin.CreateTestContext(response)
-				mockRequest, _ := http.NewRequest("DELETE",
-					"/corporation/"+testCorpID, nil)
-				ctx.Request = mockRequest
-				ctx.Params = []gin.Param{
-					{
-						Key:   "corporation_id",
-						Value: testCorpID,
-					},
-				}
-				reader := strings.NewReader(string(data))
-				ctx.Request.Body = io.NopCloser(reader)
-				return ctx
-			},
-			mock: func() {
-				uc.EXPECT().UpdateCorporation(gomock.Any(), corporationRequest).
-					Return([]entity.Corporation{}, &apierr.ErrorCodeInternalServerError{}).Times(1)
-			},
-			wantCode:     http.StatusInternalServerError,
-			wantResponse: `{"error_code":"internal_server_error","error_message":""}`,
+			wantResponse: `{"error_message":"validation_failed"}`,
 		},
 	}
 	for _, tt := range tests {
@@ -614,7 +614,7 @@ func Test_DeleteCorporation(t *testing.T) {
 				// 呼び出しなし
 			},
 			wantCode:     http.StatusBadRequest,
-			wantResponse: `{"error_code":"validation_failed","error_message":""}`,
+			wantResponse: `{"error_message":"validation_failed"}`,
 		},
 		{
 			name: "[異常系] 企業情報が取得できない場合",
@@ -637,7 +637,7 @@ func Test_DeleteCorporation(t *testing.T) {
 					Return(&apierr.ErrorCodeInternalServerError{}).Times(1)
 			},
 			wantCode:     http.StatusInternalServerError,
-			wantResponse: `{"error_code":"internal_server_error","error_message":""}`,
+			wantResponse: `{"error_message":"internal_server_error"}`,
 		},
 	}
 	for _, tt := range tests {
