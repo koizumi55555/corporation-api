@@ -1,4 +1,3 @@
-include .env.example
 export
 
 LOCAL_BIN:=$(CURDIR)/bin
@@ -77,5 +76,11 @@ bin-deps:
 	GOBIN=$(LOCAL_BIN) go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
 	GOBIN=$(LOCAL_BIN) go install github.com/golang/mock/mockgen@latest
 
+db-and-api-create:
+	cd build; docker compose up
+.PHONY: db-and-api-create
 
 
+generate-openapi:
+	sh openapi-generator/corpration.sh
+.PHONY: generate-openapi
