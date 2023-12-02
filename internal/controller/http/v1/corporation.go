@@ -32,7 +32,6 @@ func (r *corporationRoutes) GetCorporation(c *gin.Context) {
 	// validation
 	corpID, validationErr := model.ValidateCorporationIdRequest(c)
 	if validationErr != nil {
-		r.l.Warn(validationErr.Error().ErrorCode)
 		httperr.ErrorResponse(c, validationErr)
 		return
 	}
@@ -40,11 +39,9 @@ func (r *corporationRoutes) GetCorporation(c *gin.Context) {
 	// Get Corporation
 	corp, err := r.corporationUC.GetCorporation(c, corpID)
 	if err != nil {
-		if sendMessageErr := r.queueUC.SendMessage(c, err); sendMessageErr == nil {
-			r.l.Warn(err.Error().ErrorCode)
-			httperr.ErrorResponse(c, sendMessageErr)
-		}
-		r.l.Warn(err.Error().ErrorCode)
+		// if sendMessageErr := r.queueUC.SendMessage(c, err); sendMessageErr != nil {
+		// 	httperr.ErrorResponse(c, sendMessageErr)
+		// }
 		httperr.ErrorResponse(c, err)
 		return
 	}
@@ -57,11 +54,9 @@ func (r *corporationRoutes) GetCorporationList(c *gin.Context) {
 	// Get Corporation List
 	corpList, err := r.corporationUC.GetCorporationList(c)
 	if err != nil {
-		if sendMessageErr := r.queueUC.SendMessage(c, err); sendMessageErr == nil {
-			r.l.Warn(err.Error().ErrorCode)
-			httperr.ErrorResponse(c, sendMessageErr)
-		}
-		r.l.Warn(err.Error().ErrorCode)
+		// if sendMessageErr := r.queueUC.SendMessage(c, err); sendMessageErr != nil {
+		// 	httperr.ErrorResponse(c, sendMessageErr)
+		// }
 		httperr.ErrorResponse(c, err)
 		return
 	}
@@ -75,7 +70,6 @@ func (r *corporationRoutes) CreateCorporation(c *gin.Context) {
 	// validation
 	corporationPost, validationErr := model.ValidatePostCorporationRequest(c)
 	if validationErr != nil {
-		r.l.Warn(validationErr.Error().ErrorCode)
 		httperr.ErrorResponse(c, validationErr)
 		return
 	}
@@ -92,11 +86,9 @@ func (r *corporationRoutes) CreateCorporation(c *gin.Context) {
 	// Create Corporation
 	corp, err := r.corporationUC.CreateCorporation(c, input)
 	if err != nil {
-		if sendMessageErr := r.queueUC.SendMessage(c, err); sendMessageErr == nil {
-			r.l.Warn(err.Error().ErrorCode)
-			httperr.ErrorResponse(c, sendMessageErr)
-		}
-		r.l.Warn(err.Error().ErrorCode)
+		// if sendMessageErr := r.queueUC.SendMessage(c, err); sendMessageErr != nil {
+		// 	httperr.ErrorResponse(c, sendMessageErr)
+		// }
 		httperr.ErrorResponse(c, err)
 		return
 	}
@@ -110,7 +102,6 @@ func (r *corporationRoutes) UpdateCorporation(c *gin.Context) {
 	// validation
 	corpID, corporationPatch, validationErr := model.ValidatePatchCorporationRequest(c)
 	if validationErr != nil {
-		r.l.Warn(validationErr.Error().ErrorCode)
 		httperr.ErrorResponse(c, validationErr)
 		return
 	}
@@ -127,11 +118,9 @@ func (r *corporationRoutes) UpdateCorporation(c *gin.Context) {
 	// Update Corporation
 	corp, err := r.corporationUC.UpdateCorporation(c, input)
 	if err != nil {
-		if sendMessageErr := r.queueUC.SendMessage(c, err); sendMessageErr == nil {
-			r.l.Warn(err.Error().ErrorCode)
-			httperr.ErrorResponse(c, sendMessageErr)
-		}
-		r.l.Warn(err.Error().ErrorCode)
+		// if sendMessageErr := r.queueUC.SendMessage(c, err); sendMessageErr == nil {
+		// 	httperr.ErrorResponse(c, sendMessageErr)
+		// }
 		httperr.ErrorResponse(c, err)
 		return
 	}
@@ -145,17 +134,14 @@ func (r *corporationRoutes) DeleteCorporation(c *gin.Context) {
 	// validation
 	corpID, validationErr := model.ValidateCorporationIdRequest(c)
 	if validationErr != nil {
-		r.l.Warn(validationErr.Error().ErrorCode)
 		httperr.ErrorResponse(c, validationErr)
 		return
 	}
 	err := r.corporationUC.DeleteCorporation(c, corpID)
 	if err != nil {
-		if sendMessageErr := r.queueUC.SendMessage(c, err); sendMessageErr == nil {
-			r.l.Warn(err.Error().ErrorCode)
-			httperr.ErrorResponse(c, sendMessageErr)
-		}
-		r.l.Warn(err.Error().ErrorCode)
+		// if sendMessageErr := r.queueUC.SendMessage(c, err); sendMessageErr != nil {
+		// 	httperr.ErrorResponse(c, sendMessageErr)
+		// }
 		httperr.ErrorResponse(c, err)
 		return
 	}
