@@ -8,6 +8,7 @@ import (
 	"koizumi55555/corporation-api/internal/entity"
 	"koizumi55555/corporation-api/internal/usecase"
 	"koizumi55555/corporation-api/pkg/logger"
+	"strconv"
 	"time"
 
 	"github.com/AlekSi/pointer"
@@ -40,7 +41,7 @@ func (q *queue) SendMessage(
 	// メッセージをJSON文字列に変換
 	messageBody := entity.SQSMessage{
 		RequestID: uuid.NewString(),
-		Code:      pointer.ToString(appErr.Error().ErrorCode),
+		Code:      pointer.ToString(strconv.Itoa(int(appErr.StatusCode()))),
 		Message:   pointer.ToString(appErr.Error().ErrorMessage),
 		SendTime:  time.Now().String(),
 	}
