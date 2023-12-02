@@ -4,9 +4,11 @@ import (
 	"encoding/json"
 	"io"
 	"koizumi55555/corporation-api/internal/controller/http/httperr/apierr"
+	"koizumi55555/corporation-api/internal/entity"
 	"regexp"
 	"strconv"
 
+	"github.com/AlekSi/pointer"
 	"github.com/gin-gonic/gin"
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 	is "github.com/go-ozzo/ozzo-validation/v4/is"
@@ -20,12 +22,19 @@ func ValidatePatchCorporationRequest(c *gin.Context,
 	var corporationPatch CorporationPatch
 	bodyByte, err := io.ReadAll(c.Request.Body)
 	if err != nil {
-		return "", corporationPatch, apierr.ErrorCodeInvalidRequest{}
+		return "", CorporationPatch{}, apierr.ErrorCodeInvalidRequest{}
 	}
 	err = json.Unmarshal(bodyByte, &corporationPatch)
 	if err != nil {
-		return "", corporationPatch, apierr.ErrorCodeInvalidRequest{}
+		return "", CorporationPatch{}, apierr.ErrorCodeInvalidRequest{}
 	}
+
+	// corporation type
+	corporationTypeItem := []interface{}{}
+	for key := range entity.CorporationTypeStrMap {
+		corporationTypeItem = append(corporationTypeItem, key)
+	}
+
 	// validation
 	validateList := map[string]error{}
 	fieldCorporation := "corporation_id"
@@ -43,29 +52,30 @@ func ValidatePatchCorporationRequest(c *gin.Context,
 	)
 
 	fieldDomain := "domain"
-	validateList[fieldDomain] = validation.Validate(
-		corporationPatch.Domain,
-		validation.Match(regexp.MustCompile("^[a-zA-Z0-9]*$")),
-	)
+	if len(pointer.GetString(corporationPatch.Domain)) > 0 {
+		validateList[fieldDomain] = validation.Validate(
+			corporationPatch.Domain,
+			validation.Match(regexp.MustCompile("^[a-zA-Z0-9]*$")),
+		)
+	}
 
 	fieldNumber := "number"
 	validateList[fieldNumber] = validation.Validate(
-		corporationPatch.Number,
-		// validation.Length(1, 6),
-		// validation.Match(regexp.MustCompile("[0-9]")),
+		strconv.Itoa(int(pointer.GetInt32(corporationPatch.Number))),
+		validation.Length(0, 6),
 	)
 
 	fieldCorpType := "corp_type"
 	validateList[fieldCorpType] = validation.Validate(
 		corporationPatch.CorpType,
 		validation.Required,
-		validation.In("株式会社", "合同会社", "合資会社", "合名会社"),
+		validation.In(corporationTypeItem...),
 	)
 
 	// validation
 	validationErr := (validation.Errors)(validateList).Filter()
 	if validationErr != nil {
-		return "", corporationPatch, apierr.ErrorCodeValidationFailed{}
+		return "", CorporationPatch{}, apierr.ErrorCodeValidationFailed{}
 	}
 
 	if corporationPatch.Number != nil && corporationPatch.CorpType != nil {
@@ -75,13 +85,13 @@ func ValidatePatchCorporationRequest(c *gin.Context,
 		case coLtd:
 			if corporationNumberStr[0:1] != "1" {
 				// エラー処理: 株式会社の場合、企業番号は1である必要がある
-				return "", corporationPatch, apierr.ErrorCodeValidationFailed{}
+				return "", CorporationPatch{}, apierr.ErrorCodeValidationFailed{}
 
 			}
 		default:
 			if corporationNumberStr[0:1] == "1" {
 				// エラー処理: その他の企業タイプの場合、企業番号は2以上である必要がある
-				return "", corporationPatch, apierr.ErrorCodeValidationFailed{}
+				return "", CorporationPatch{}, apierr.ErrorCodeValidationFailed{}
 			}
 		}
 	}
@@ -103,8 +113,13 @@ func ValidatePostCorporationRequest(c *gin.Context,
 		return corporationCreate, apierr.ErrorCodeValidationFailed{}
 	}
 
-	validateList := map[string]error{}
+	// corporation type
+	corporationTypeItem := []interface{}{}
+	for key := range entity.CorporationTypeStrMap {
+		corporationTypeItem = append(corporationTypeItem, key)
+	}
 
+	validateList := map[string]error{}
 	// body validation
 	fieldName := "name"
 	validateList[fieldName] = validation.Validate(
@@ -120,15 +135,14 @@ func ValidatePostCorporationRequest(c *gin.Context,
 
 	fieldNumber := "number"
 	validateList[fieldNumber] = validation.Validate(
-		corporationCreate.Number,
-		// validation.Length(1, 6),
-		// validation.Match(regexp.MustCompile("[0-9]*$")),
+		strconv.Itoa(int(pointer.GetInt32(&corporationCreate.Number))),
+		validation.Length(1, 6),
 	)
 
 	fieldCorpType := "corp_type"
 	validateList[fieldCorpType] = validation.Validate(
 		corporationCreate.CorpType,
-		validation.In("株式会社", "合同会社", "合資会社", "合名会社"),
+		validation.In(corporationTypeItem...),
 	)
 
 	corporationNumberStr := strconv.Itoa(int(corporationCreate.Number))
