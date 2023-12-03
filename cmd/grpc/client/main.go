@@ -22,10 +22,10 @@ var (
 func main() {
 	fmt.Println("start gRPC Client.")
 
-	// 1. 標準入力から文字列を受け取るスキャナを用意
+	// 標準入力から文字列を受け取るスキャナを用意
 	scanner = bufio.NewScanner(os.Stdin)
 
-	// 2. gRPCサーバーとのコネクションを確立
+	// gRPCサーバーとのコネクションを確立
 	address := "localhost:9000"
 	conn, err := grpc.Dial(
 		address,
@@ -38,7 +38,7 @@ func main() {
 		return
 	}
 	defer conn.Close()
-	// 3. gRPCクライアントを生成
+	// gRPCクライアントを生成
 	client = pb.NewGreetingServiceClient(conn)
 
 	for {
