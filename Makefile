@@ -80,7 +80,29 @@ db-and-api-create:
 	cd build; docker compose up
 .PHONY: db-and-api-create
 
-
 generate-openapi:
 	sh openapi-generator/corpration.sh
 .PHONY: generate-openapi
+
+generate-gprc:
+	cd proto && \
+	protoc \
+    	--go_out=../pkg/grpc \
+    	--go_opt=paths=source_relative \
+    	--go-grpc_out=../pkg/grpc \
+    	--go-grpc_opt=paths=source_relative \
+    	--proto_path=../proto \
+    	copration.proto
+.PHONY: generate-gprc
+
+run-grpc-server:
+	go run cmd/grpc/server/main.go
+.PHONY: run-grpc-server
+
+run-grpc-client:
+	go run cmd/grpc/client/main.go
+.PHONY: run-grpc-client
+
+run-corpration-api:
+	go run cmd/app/main.go
+.PHONY: run-corpration-api
