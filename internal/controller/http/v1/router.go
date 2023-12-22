@@ -1,9 +1,9 @@
 package v1
 
 import (
-	"koizumi55555/corporation-api/config"
-	"koizumi55555/corporation-api/internal/usecase"
-	"koizumi55555/corporation-api/pkg/logger"
+	"github.com/koizumi55555/corporation-api/config"
+	"github.com/koizumi55555/corporation-api/internal/usecase"
+	"github.com/koizumi55555/corporation-api/pkg/logger"
 
 	"github.com/gin-gonic/gin"
 )

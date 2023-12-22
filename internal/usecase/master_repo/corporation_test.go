@@ -1,9 +1,9 @@
 package master_repo
 
 // import (
-// 	"koizumi55555/corporation-api/internal/controller/http/httperr/apierr"
-// 	"koizumi55555/corporation-api/internal/entity"
-// 	"koizumi55555/corporation-api/internal/usecase/master_repo/schema"
+// 	"github.com/koizumi55555/corporation-api/internal/controller/http/httperr/apierr"
+// 	"github.com/koizumi55555/corporation-api/internal/entity"
+// 	"github.com/koizumi55555/corporation-api/internal/usecase/master_repo/schema"
 // 	"reflect"
 // 	"testing"
 

@@ -2,8 +2,9 @@ package usecase
 
 import (
 	"context"
-	"koizumi55555/corporation-api/internal/controller/http/httperr/apierr"
-	"koizumi55555/corporation-api/internal/entity"
+
+	"github.com/koizumi55555/corporation-api/internal/controller/http/httperr/apierr"
+	"github.com/koizumi55555/corporation-api/internal/entity"
 )
 
 type (

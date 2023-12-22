@@ -3,13 +3,15 @@ package queue
 import (
 	"context"
 	"encoding/json"
-	"koizumi55555/corporation-api/config"
-	"koizumi55555/corporation-api/internal/controller/http/httperr/apierr"
-	"koizumi55555/corporation-api/internal/entity"
-	"koizumi55555/corporation-api/internal/usecase"
-	"koizumi55555/corporation-api/pkg/logger"
 	"strconv"
 	"time"
+
+	"github.com/koizumi55555/corporation-api/config"
+	"github.com/koizumi55555/corporation-api/internal/controller/http/httperr/apierr"
+
+	"github.com/koizumi55555/corporation-api/internal/entity"
+	"github.com/koizumi55555/corporation-api/internal/usecase"
+	"github.com/koizumi55555/corporation-api/pkg/logger"
 
 	"github.com/AlekSi/pointer"
 	"github.com/aws/aws-sdk-go/aws"

@@ -2,11 +2,12 @@ package usecase_test
 
 import (
 	"context"
-	"koizumi55555/corporation-api/internal/controller/http/httperr/apierr"
-	"koizumi55555/corporation-api/internal/entity"
-	"koizumi55555/corporation-api/internal/usecase"
-	"koizumi55555/corporation-api/internal/usecase/mock"
 	"testing"
+
+	"github.com/koizumi55555/corporation-api/internal/controller/http/httperr/apierr"
+	"github.com/koizumi55555/corporation-api/internal/entity"
+	"github.com/koizumi55555/corporation-api/internal/usecase"
+	"github.com/koizumi55555/corporation-api/internal/usecase/mock"
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/uuid"

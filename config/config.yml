@@ -5,7 +5,7 @@ app:
 logger:
   log_level: debug
 
-queueConfig: 
+queue_config:
    region: ap-northeast-1
    url: https://sqs.ap-northeast-1.amazonaws.com/993928368265/CorporationQueue.fifo
    endpoint: https://sqs.ap-northeast-1.amazonaws.com

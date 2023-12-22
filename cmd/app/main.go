@@ -1,9 +1,10 @@
 package main
 
 import (
-	"koizumi55555/corporation-api/config"
-	"koizumi55555/corporation-api/internal/app"
 	"log"
+
+	"github.com/koizumi55555/corporation-api/config"
+	"github.com/koizumi55555/corporation-api/internal/app"
 )
 
 func main() {

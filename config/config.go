@@ -11,7 +11,7 @@ type (
 	Config struct {
 		App         `yaml:"app"`
 		Logger      `yaml:"logger"`
-		QueueConfig `yaml:"queueConfig"`
+		QueueConfig `yaml:"queue_config"`
 	}
 
 	// App -.
@@ -37,7 +37,7 @@ type (
 func NewConfig() (*Config, error) {
 	cfg := &Config{}
 
-	err := cleanenv.ReadConfig("/home/kentaro/git/corporation-api/config/config.yml", cfg)
+	err := cleanenv.ReadConfig("github.com/koizumi55555/corporation-api/config/config.yml", cfg)
 	if err != nil {
 		return nil, fmt.Errorf("config error: %w", err)
 	}

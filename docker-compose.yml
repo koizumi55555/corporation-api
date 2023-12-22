@@ -4,7 +4,7 @@ services:
     image: postgres:15.3
     container_name: corporation-api-db
     build:
-      context: db
+      dockerfile: ./db
     ports:
       - "5432:5432"
     environment:
@@ -13,9 +13,7 @@ services:
       POSTGRES_PASSWORD: corporation-api-pw
   api:
     container_name: corporation-api
-    build:
-      context: ../
-      dockerfile: ./build/api/Dockerfile
+    build: ./
     ports:
       - "8080:8080"
     depends_on:

@@ -84,3 +84,12 @@ db-and-api-create:
 generate-openapi:
 	sh openapi-generator/corpration.sh
 .PHONY: generate-openapi
+
+
+go-run:
+	cd cmd/app; go run main.go
+.PHONY: go-run
+
+db-create:
+	cd db; docker compose up -d
+.PHONY: go-run

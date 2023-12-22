@@ -1,9 +1,10 @@
 package master_repo
 
 import (
-	db "koizumi55555/corporation-api/build/db/postgres"
-	"koizumi55555/corporation-api/internal/usecase/master_repo/schema"
 	"testing"
+
+	db "github.com/koizumi55555/corporation-api/db/postgres"
+	"github.com/koizumi55555/corporation-api/internal/usecase/master_repo/schema"
 
 	"gorm.io/gorm"
 )

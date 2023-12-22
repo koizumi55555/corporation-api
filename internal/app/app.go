@@ -2,13 +2,14 @@ package app
 
 import (
 	"fmt"
-	db "koizumi55555/corporation-api/build/db/postgres"
-	"koizumi55555/corporation-api/config"
-	v1 "koizumi55555/corporation-api/internal/controller/http/v1"
-	"koizumi55555/corporation-api/internal/usecase"
-	master_repo "koizumi55555/corporation-api/internal/usecase/master_repo"
-	"koizumi55555/corporation-api/internal/usecase/queue"
-	"koizumi55555/corporation-api/pkg/logger"
+
+	"github.com/koizumi55555/corporation-api/config"
+	db "github.com/koizumi55555/corporation-api/db/postgres"
+	v1 "github.com/koizumi55555/corporation-api/internal/controller/http/v1"
+	"github.com/koizumi55555/corporation-api/internal/usecase"
+	master_repo "github.com/koizumi55555/corporation-api/internal/usecase/master_repo"
+	"github.com/koizumi55555/corporation-api/internal/usecase/queue"
+	"github.com/koizumi55555/corporation-api/pkg/logger"
 
 	"github.com/gin-gonic/gin"
 )
