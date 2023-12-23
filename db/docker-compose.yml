@@ -3,9 +3,8 @@ services:
   postgres:
     image: postgres:15.3
     container_name: corporation-api-db
-    build: ./
     ports:
-      - "5433:5432"
+      - "5432:5432"
     environment:
       POSTGRES_DB: corporation-api
       POSTGRES_USER: corporation-api-user

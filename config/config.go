@@ -37,7 +37,7 @@ type (
 func NewConfig() (*Config, error) {
 	cfg := &Config{}
 
-	err := cleanenv.ReadConfig("github.com/koizumi55555/corporation-api/config/config.yml", cfg)
+	err := cleanenv.ReadConfig("/home/kentaro/assignment/corporation-api/config/config.yml", cfg)
 	if err != nil {
 		return nil, fmt.Errorf("config error: %w", err)
 	}

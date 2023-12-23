@@ -4,12 +4,12 @@ import (
 	"fmt"
 
 	"github.com/koizumi55555/corporation-api/config"
-	db "github.com/koizumi55555/corporation-api/db/postgres"
 	v1 "github.com/koizumi55555/corporation-api/internal/controller/http/v1"
 	"github.com/koizumi55555/corporation-api/internal/usecase"
 	master_repo "github.com/koizumi55555/corporation-api/internal/usecase/master_repo"
 	"github.com/koizumi55555/corporation-api/internal/usecase/queue"
 	"github.com/koizumi55555/corporation-api/pkg/logger"
+	db "github.com/koizumi55555/corporation-api/pkg/rdb"
 
 	"github.com/gin-gonic/gin"
 )

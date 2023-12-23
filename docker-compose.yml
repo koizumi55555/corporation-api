@@ -2,7 +2,7 @@ version: '3.9'
 services:
   postgres:
     image: postgres:15.3
-    container_name: corporation-api-db
+    container_name: corporation-db
     build:
       dockerfile: ./db
     ports:
