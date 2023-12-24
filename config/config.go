@@ -12,6 +12,7 @@ type (
 		App         `yaml:"app"`
 		Logger      `yaml:"logger"`
 		QueueConfig `yaml:"queue_config"`
+		DataSource  `yaml:"data_source"`
 	}
 
 	// App -.
@@ -31,13 +32,23 @@ type (
 		Endpoint string `env-required:"false" yaml:"endpoint" env:"SQS_ENDPOINT"`
 		Url      string `env-required:"false" yaml:"url" env:"QUEUE_URL"`
 	}
+
+	// DataSource -.
+	DataSource struct {
+		DB       string `env-required:"true" yaml:"db" env:"POSTGRES_DB"`
+		User     string `env-required:"true" yaml:"user" env:"POSTGRES_USER"`
+		Password string `env-required:"true" yaml:"password" env:"POSTGRES_PASSWORD"`
+		Host     string `env-required:"true" yaml:"host" env:"POSTGRES_HOST"`
+		Port     string `env-required:"true" yaml:"port" env:"POSTGRES_PORT"`
+		SslMode  string `yaml:"ssl_mode" env:"POSTGRES_SSL_MODE"`
+	}
 )
 
 // NewConfig returns app config.
 func NewConfig() (*Config, error) {
 	cfg := &Config{}
 
-	err := cleanenv.ReadConfig("/home/kentaro/assignment/corporation-api/config/config.yml", cfg)
+	err := cleanenv.ReadConfig("./config/config.yml", cfg)
 	if err != nil {
 		return nil, fmt.Errorf("config error: %w", err)
 	}

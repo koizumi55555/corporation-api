@@ -9,17 +9,17 @@ import (
 	"gorm.io/gorm"
 )
 
-func makeMasterRepo(t *testing.T) *MasterRepository {
-	t.Helper()
-	dbh, err := db.NewDBHandler()
-	if err != nil {
-		dbh, err = db.NewDBHandler()
-		if err != nil {
-			t.Fatal(err)
-		}
-	}
-	return New(dbh)
-}
+// func makeMasterRepo(t *testing.T) *MasterRepository {
+// 	t.Helper()
+// 	dbh, err := db.NewDBHandler()
+// 	if err != nil {
+// 		dbh, err = db.NewDBHandler()
+// 		if err != nil {
+// 			t.Fatal(err)
+// 		}
+// 	}
+// 	return New(dbh)
+// }
 
 func TruncateDB(t *testing.T, db *db.DBHandler) {
 	t.Helper()

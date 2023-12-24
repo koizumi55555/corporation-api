@@ -17,7 +17,14 @@ import (
 func Run(cfg *config.Config) error {
 	l := logger.New(cfg.Level)
 
-	masterDBH, err := db.NewDBHandler()
+	masterDBH, err := db.NewDBHandler(
+		cfg.DataSource.Host,
+		cfg.DataSource.Port,
+		cfg.DataSource.User,
+		cfg.DataSource.Password,
+		cfg.DataSource.DB,
+		cfg.DataSource.SslMode,
+	)
 	if err != nil {
 		return fmt.Errorf("DBHandler error: %w", err)
 	}

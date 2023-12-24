@@ -1,6 +1,7 @@
 package db
 
 import (
+	"fmt"
 	"log"
 
 	"gorm.io/driver/postgres"
@@ -11,19 +12,21 @@ type DBHandler struct {
 	Conn *gorm.DB
 }
 
-func NewDBHandler() (*DBHandler, error) {
-	conn, err := connect()
+func NewDBHandler(host, port, user, password, db, sslMode string) (*DBHandler, error) {
+	conn, err := connect(host, port, user, password, db, sslMode)
 	if err != nil {
 		return nil, err
 	}
-	db := &DBHandler{
+	dbh := &DBHandler{
 		Conn: conn,
 	}
-	return db, nil
+
+	return dbh, nil
 }
 
-func connect() (*gorm.DB, error) {
-	dsn := "host=localhost user=corporation-api-user password=corporation-api-pw dbname=corporation-api port=5432 sslmode=disable"
+func connect(host, port, user, password, db, sslMode string) (*gorm.DB, error) {
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=%s",
+		host, port, user, password, db, sslMode)
 	conn, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("Failed to connect to database: %v", err)
