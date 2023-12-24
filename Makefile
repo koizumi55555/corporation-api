@@ -77,10 +77,23 @@ bin-deps:
 	GOBIN=$(LOCAL_BIN) go install github.com/golang/mock/mockgen@latest
 
 db-and-api-create:
-	cd build; docker compose up
+	docker compose up
 .PHONY: db-and-api-create
 
 
 generate-openapi:
 	sh openapi-generator/corpration.sh
 .PHONY: generate-openapi
+
+
+go-run:
+	cd cmd/app; go run main.go
+.PHONY: go-run
+
+db-create:
+	cd db; docker compose up -d
+.PHONY: go-run
+
+db-migrate:
+	cd db; sql-migrate up
+.PHONY: db-migrate

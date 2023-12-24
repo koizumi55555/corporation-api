@@ -1,0 +1,4 @@
+development:
+  dialect: postgres
+  dir: migrations
+  datasource: host=localhost user=corporation-api-user password=corporation-api-pw dbname=corporation-api port=5432 sslmode=disable

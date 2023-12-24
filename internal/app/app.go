@@ -2,13 +2,14 @@ package app
 
 import (
 	"fmt"
-	db "koizumi55555/corporation-api/build/db/postgres"
-	"koizumi55555/corporation-api/config"
-	v1 "koizumi55555/corporation-api/internal/controller/http/v1"
-	"koizumi55555/corporation-api/internal/usecase"
-	master_repo "koizumi55555/corporation-api/internal/usecase/master_repo"
-	"koizumi55555/corporation-api/internal/usecase/queue"
-	"koizumi55555/corporation-api/pkg/logger"
+
+	"github.com/koizumi55555/corporation-api/config"
+	v1 "github.com/koizumi55555/corporation-api/internal/controller/http/v1"
+	"github.com/koizumi55555/corporation-api/internal/usecase"
+	master_repo "github.com/koizumi55555/corporation-api/internal/usecase/master_repo"
+	"github.com/koizumi55555/corporation-api/internal/usecase/queue"
+	"github.com/koizumi55555/corporation-api/pkg/logger"
+	db "github.com/koizumi55555/corporation-api/pkg/rdb"
 
 	"github.com/gin-gonic/gin"
 )
@@ -16,7 +17,14 @@ import (
 func Run(cfg *config.Config) error {
 	l := logger.New(cfg.Level)
 
-	masterDBH, err := db.NewDBHandler()
+	masterDBH, err := db.NewDBHandler(
+		cfg.DataSource.Host,
+		cfg.DataSource.Port,
+		cfg.DataSource.User,
+		cfg.DataSource.Password,
+		cfg.DataSource.DB,
+		cfg.DataSource.SslMode,
+	)
 	if err != nil {
 		return fmt.Errorf("DBHandler error: %w", err)
 	}

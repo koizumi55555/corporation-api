@@ -3,14 +3,15 @@ package v1
 import (
 	"encoding/json"
 	"io"
-	"koizumi55555/corporation-api/internal/controller/http/httperr/apierr"
-	"koizumi55555/corporation-api/internal/controller/http/model"
-	"koizumi55555/corporation-api/internal/entity"
-	"koizumi55555/corporation-api/internal/usecase/mock"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
+
+	"github.com/koizumi55555/corporation-api/internal/controller/http/httperr/apierr"
+	"github.com/koizumi55555/corporation-api/internal/controller/http/model"
+	"github.com/koizumi55555/corporation-api/internal/entity"
+	"github.com/koizumi55555/corporation-api/internal/usecase/mock"
 
 	"github.com/AlekSi/pointer"
 	"github.com/gin-gonic/gin"

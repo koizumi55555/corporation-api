@@ -6,8 +6,8 @@ package mock
 
 import (
 	context "context"
-	apierr "koizumi55555/corporation-api/internal/controller/http/httperr/apierr"
-	entity "koizumi55555/corporation-api/internal/entity"
+	apierr "github.com/koizumi55555/corporation-api/internal/controller/http/httperr/apierr"
+	entity "github.com/koizumi55555/corporation-api/internal/entity"
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"

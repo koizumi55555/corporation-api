@@ -3,10 +3,11 @@ package model
 import (
 	"bytes"
 	"io"
-	"koizumi55555/corporation-api/internal/controller/http/httperr/apierr"
 	"net/http"
 	"reflect"
 	"testing"
+
+	"github.com/koizumi55555/corporation-api/internal/controller/http/httperr/apierr"
 
 	"github.com/AlekSi/pointer"
 	"github.com/gin-gonic/gin"

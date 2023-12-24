@@ -1,12 +1,13 @@
 package v1
 
 import (
-	"koizumi55555/corporation-api/internal/controller/http/httperr"
-	"koizumi55555/corporation-api/internal/controller/http/model"
-	"koizumi55555/corporation-api/internal/entity"
-	"koizumi55555/corporation-api/internal/usecase"
-	"koizumi55555/corporation-api/pkg/logger"
 	"net/http"
+
+	"github.com/koizumi55555/corporation-api/internal/controller/http/httperr"
+	"github.com/koizumi55555/corporation-api/internal/controller/http/model"
+	"github.com/koizumi55555/corporation-api/internal/entity"
+	"github.com/koizumi55555/corporation-api/internal/usecase"
+	"github.com/koizumi55555/corporation-api/pkg/logger"
 
 	"github.com/gin-gonic/gin"
 )

@@ -2,8 +2,9 @@ package mock
 
 import (
 	"fmt"
-	"koizumi55555/corporation-api/pkg/logger"
 	"testing"
+
+	"github.com/koizumi55555/corporation-api/pkg/logger"
 
 	gomock "github.com/golang/mock/gomock"
 	"github.com/google/go-cmp/cmp"

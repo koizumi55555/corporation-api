@@ -1,8 +1,8 @@
 package master_repo
 
 import (
-	db "koizumi55555/corporation-api/build/db/postgres"
-	"koizumi55555/corporation-api/pkg/logger"
+	"github.com/koizumi55555/corporation-api/pkg/logger"
+	db "github.com/koizumi55555/corporation-api/pkg/rdb"
 )
 
 type MasterRepository struct {
